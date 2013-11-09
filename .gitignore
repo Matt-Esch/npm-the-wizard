@@ -19,3 +19,4 @@ compile
 tags
 .npmrc
 publish-npm/config.json
+publish-npm/modules
