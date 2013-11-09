@@ -27,4 +27,6 @@ router.addRoute("/entry.js", function (req, res) {
     })(req, res)
 })
 
+router.addRoute("/publish", require("./routes/publish.js"))
+
 module.exports = router
