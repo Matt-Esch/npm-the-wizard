@@ -7,21 +7,42 @@ var githubRepo = require('./repo.js');
 
 // This function will create a tree/blob structure for the files, create a commit
 // and update master to point to the new commit.
-module.exports = function (root, user, files, callback) {
+module.exports = function (root, user, files, message, callback) {
   var repo = githubRepo(root);
 
   console.log({
     root: root,
     user: user,
-    files: files
+    files: files,
+    message: message
   });
 
-  return saveTree(files, function (err, hash) {
+  return saveTree(files, function (err, treeHash) {
     if (err) return callback(err);
-    console.log("tree hash", hash);
-    return callback(null);
+    console.log("tree hash", treeHash);
+    return repo.resolve("HEAD", function (err, parentHash) {
+      if (err) return callback(err);
+      console.log("parent hash", parentHash);
+      repo.saveAs("commit", {
+        tree: treeHash,
+        parent: parentHash,
+        author: user,
+        message: message
+      }, onCommit);
+    });
   });
 
+  function onCommit(err, commitHash) {
+    console.log("onCommit", arguments);
+    if (err) return callback(err);
+    console.log("commit hash", commitHash);
+    console.log("Updating HEAD to point to new commit");
+    return repo.writeRef("refs/heads/master", commitHash, function (err) {
+      if (err) return callback(err);
+      callback(null, commitHash);
+    });
+  }
+  
   function saveTree(files, callback) {
     var done = false;
     var names = Object.keys(files);
@@ -40,7 +61,6 @@ module.exports = function (root, user, files, callback) {
       }
 
       function onSave(err, hash) {
-        console.log("onSave", i, left);
         if (err) {
           if (done) return;
           done = true;

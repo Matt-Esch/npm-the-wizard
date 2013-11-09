@@ -69,7 +69,8 @@ function githubPublish(module, callback) {
     var root = meta.githubFragment;
     var user = { name: meta.githubUserName, email: meta.githubEmail };
     var files = meta.gitRepoFiles;
-    jsGithubPublish(root, user, files, callback);
+    var message = "Initial Commit Created by npm-the-wizard!";
+    jsGithubPublish(root, user, files, message, callback);
 }
 
 // implement real thing
