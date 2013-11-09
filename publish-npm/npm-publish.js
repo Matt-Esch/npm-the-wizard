@@ -18,7 +18,7 @@ function npmPublish(folder, userName, callback) {
                 return callback(err)
             }
 
-            callback(new Error("not implemented"))
+            changeOwner(folder, userName, callback)
         })
     })
 }
@@ -44,7 +44,7 @@ function ensureUser(callback) {
 }
 
 function callPublish(folder, callback) {
-    var cmd = npmrun([
+    npmrun([
         "--userconfig=" + npmConfig,
         "publish"
     ], {
@@ -53,7 +53,27 @@ function callPublish(folder, callback) {
 }
 
 function changeOwner(folder, userName, callback) {
+    var packageName = path.basename(folder)
 
+    npmrun([
+        "--userconfig=" + npmConfig,
+        "owner",
+        "add",
+        userName,
+        packageName
+    ], { cwd: folder }, function (err) {
+        if (err) {
+            return callback(err)
+        }
+
+        npmrun([
+            "--userconfig=" + npmConfig,
+            "owner",
+            "rm",
+            config.username,
+            packageName
+        ], { cwd: folder }, callback)
+    })
 }
 
 function matchRegex(command, regex, callback) {
