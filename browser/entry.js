@@ -3,6 +3,7 @@ var window = require("global/window")
 
 var easing = require("./lib/easing.js")
 var scrollTo = require("./lib/scroll-to")
+var publishToRepo = require("./publish.js")
 
 var codeModule = {}
 
