@@ -5,9 +5,26 @@ var isProduction = (process.env.NODE_ENV === 'production');
 var http = require('http');
 var port = (isProduction ? 80 : 8000);
 
+function corsHeaders(req, res) {
+  var host;
+  if (req.headers.referer) {
+    var parsed_url = url.parse(req.headers.referer);
+    host = parsed_url.protocol + "//" + parsed_url.host;
+  }
+  else {
+    host = "*";
+  }
+  res.setHeader('Access-Control-Allow-Origin', host);
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+}
+
 http.createServer(function (req, res) {
   // http://blog.nodeknockout.com/post/35364532732/protip-add-the-vote-ko-badge-to-your-app
   var voteko = '<iframe src="http://nodeknockout.com/iframe/team-mad-science" frameborder=0 scrolling=no allowtransparency=true width=115 height=25></iframe>';
+
+  console.log(req.headers);
 
   res.writeHead(200, {'Content-Type': 'text/html'});
   res.end('<html><body>' + voteko + '</body></html>\n');
