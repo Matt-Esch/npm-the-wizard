@@ -28,12 +28,12 @@ function load(hash, callback) {
   if (!type) return callback(new Error("Raw load is not supported for unknown hashes"));
   return this.loadAs(type, hash, onLoad);
 
-  function onLoad(err, body) {
+  function onLoad(err, body, hash) {
     if (err) return callback(err);
     return callback(null, {
       type: type,
       body: body
-    });
+    }, hash);
   }
 }
 
@@ -47,8 +47,9 @@ function loadAs(type, hash, callback) {
   var repo = this;
   return repo.resolve(hash, onHash);
 
-  function onHash(err, hash) {
+  function onHash(err, result) {
     if (err) return callback(err);
+    hash = result;
     repo.apiGet("/repos/:root/git/" + type + "s/" + hash, onValue);
   }
 
@@ -62,7 +63,7 @@ function loadAs(type, hash, callback) {
     catch (err) {
       return callback(err);
     }
-    return callback(null, body);
+    return callback(null, body, hash);
   }
 }
 

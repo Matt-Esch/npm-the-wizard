@@ -1,10 +1,14 @@
 
-  var log = console.log = console.error = require('domlog');
-  log.setup({
-    whiteSpace: "pre",
-    lineHeight: "1em",
-    overflow: "auto",
-  });
+//   var log = console.log = console.error = require('domlog');
+//   log.setup({
+//     whiteSpace: "pre-wrap",
+//     lineHeight: "1em",
+//     transition: "inherit",
+//     background: "#000",
+//     top: "0",
+//     height: "100%",
+//     overflow: "auto",
+//   });
 
 var githubRepo = require('./repo.js');
 
@@ -22,23 +26,22 @@ repo.logWalk("HEAD", function (err, log) {
     if (!commit) return logEnd(shallow);
     if (commit.last) shallow = true;
     logCommit(commit);
-    // return log.read(onRead);
-    repo.loadAs("tree", commit.tree, function (err, tree) {
-        if (err) throw err;
-        console.log("TREE", tree);
-        repo.treeWalk(commit.tree, function (err, tree) {
-          if (err) throw err;
-          tree.read(onEntry);
-          function onEntry(err, entry) {
-            if (err) throw err;
-            if (!entry) {
-              return log.read(onRead);
-            }
-            logEntry(entry);
-            return tree.read(onEntry);
-          }
-        });
-    });
+    return log.read(onRead);
+    // repo.loadAs("tree", commit.tree, function (err, tree) {
+    //     if (err) throw err;
+    //     repo.treeWalk(commit.tree, function (err, tree) {
+    //       if (err) throw err;
+    //       tree.read(onEntry);
+    //       function onEntry(err, entry) {
+    //         if (err) throw err;
+    //         if (!entry) {
+    //           return log.read(onRead);
+    //         }
+    //         logEntry(entry);
+    //         return tree.read(onEntry);
+    //       }
+    //     });
+    // });
   }
 });
 
