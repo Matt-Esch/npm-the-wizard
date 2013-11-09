@@ -11,10 +11,11 @@
   
     <div id="leftPanel">
       <div id="name">
-        <label for="name">Name:</label><input onkeyup="moduleNameChange()" type="text" name="name" id="moduleName" value="">
+        <label for="name">Name:</label>
+        <input type="text" name="name" id="moduleName" value="">
       </div>
       <div style="clear: both;">
-      <textarea id="sourceCode" onkeyup="sourceCodeChange()"> alert(eval(eval(alert(eval(eval()))))) 
+      <textarea id="sourceCode"> alert(eval(eval(alert(eval(eval()))))) 
         
         
 
@@ -44,6 +45,16 @@
     </div>
     
     <div id="rightPanel">
+      
+      <div id="menu">
+        <iframe style="display: none" src='http://nodeknockout.com/iframe/team-mad-science' frameborder=0 scrolling=no allowtransparency=true width=115 height=25></iframe>
+        <button id="scroll-to-demo" class="demo active">Demo</button>
+        <button id="scroll-to-docs" class="docs">Docs</button>
+        <button id="scroll-to-test" class="test">Test</button>
+        <button id="login" class="login">Login</button>
+        <button id="publish" class="publish">Publish</button>
+      </div>
+      
       <div id="demo">
         <h1>DEMO</h1>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
@@ -59,15 +70,6 @@
       </div>
     </div>
     
-  </div>
-  
-  <div id="menu">
-    <iframe style="display: none" src='http://nodeknockout.com/iframe/team-mad-science' frameborder=0 scrolling=no allowtransparency=true width=115 height=25></iframe>
-    <button class="demo active" onclick="scrollToDemo()">Demo</button>
-    <button class="docs" onclick="scrollToDocs()">Docs</button>
-    <button class="test" onclick="scrollToTest()">Test</button>
-    <button class="publish" onclick="login()">Login</button>
-    <button class="publish" onclick="publish()">Publish</button>
   </div>
   
   <script src="entry.js"></script>
