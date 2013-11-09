@@ -6,6 +6,7 @@ body {
   height:100%; 
   min-height:100%; 
   position:relative;
+  background-color: black;
 }
 
 * {
@@ -20,10 +21,16 @@ body {
 }
 
 #leftPanel {
-  background-color: #ddd;
-  height: 600px;
   width: 50%;
   float: left;
+}
+
+#leftPanel textarea {
+  opacity: 0.0;
+}
+
+.CodeMirror {
+  height: 1200px;
 }
 
 #name {
@@ -43,6 +50,7 @@ body {
   width: 1086px;
 }
 */
+
 #rightPanel {
   width: 50%;
   height:100%; 
@@ -65,34 +73,70 @@ body {
   margin: 20px 0 0px 0;
 }
 
-#intro, #docs, #demo, #test, #name {
+#login, #docs, #demo, #test, #name {
   margin: 60px 20px 20px 20px;
   height: 800px;
 }
 
-#menu {
-  padding: 10px 10px 10px 20px;
-  position: fixed;
-  top: 0;
+#guide.deactivated {
+  opacity: 0.0;
+}
+
+#guide.activated {
+  opacity: 1.0;
+}
+
+#guide.login {
+  transition: opacity 120ms, top 120ms, -webkit-transform 120ms;
+  -webkit-transform: scale(4.0);
+  top: 50%;
   left: 50%;
 }
 
-#menu button {
+#guide.settled {
+  transition-delay: 0.5s;
+  -webkit-transform: scale(1.0);
+  top: 0%;
+  left: 50%;
+  margin: 0px 0px 0px 0px;
+}
+
+#guide {
+  transition: opacity 120ms, top 120ms, margin 120ms, -webkit-transform 120ms;
+  -webkit-transition: opacity 120ms, top 120ms, margin 120ms, -webkit-transform 120ms;
+  transition-timing-function: ease-in;
+  -webkit-transition-timing-function: ease-in;
+  padding: 10px 10px 10px 20px;
+  position: fixed;
+}
+
+#guide button.hidden, #guide .arrow.hidden {
+  display: none;
+  opacity: 0.0;
+}
+
+#guide button.invisible, #guide .arrow.invisible {
+  opacity: 0.0;
+}
+
+#guide .arrow {
+  opacity: 1.0;
+}
+
+#guide button {
+  opacity: 1.0;
+  -webkit-transition: opacity 620ms;
+  transition: opacity 620ms;
   font-size: 20px;
   padding: 3px;
   border: 1px solid #ddd;
   background-color: white;
 }
 
-#menu button.active {
+#guide button.active {
   background-color: hsla(240, 70%, 90%, 1.0);
 }
 
-#menu button:focus {
+#guide button:focus {
   outline: none;
-}
-
-#menu button.publish {
-  font-size: 22px;
-}
 }
