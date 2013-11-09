@@ -128,9 +128,12 @@
     <button class="demo active" onclick="scrollToDemo()">Demo</button>
     <button class="docs" onclick="scrollToDocs()">Docs</button>
     <button class="test" onclick="scrollToTest()">Test</button>
+    <button class="publish" onclick="publish()">Publish</button>
   </div>
   
   <script type="text/javascript" charset="utf-8">
+  
+    var codeModule;
 
     // from Paul Irish at some point...
     window.requestAnimationFrame = (function(callback) {
@@ -255,6 +258,37 @@
     var scrollToTest = function() {
       scrollTo(testElement.offsetTop-20, scrollElement, 300, easing.easeInQuad);
     }
+    
+    var NpmGitGithub = {
+      publish: function(codeModule, callback) {
+        var name = codeModule.name;
+        var deps = codeModule.deps;
+        var metaData = codeModule.metaData;
+        var sourceCode = codeModule.sourceCode;
+        callback(false, {
+          name: name,
+          message: "didPublishSuccessfully",
+          code: 200
+        });
+      }
+    }
+    
+    var publishToRepo = NpmGitGithub.publish;
+    
+    var didPublishSuccessfully = function(res) {
+      
+    }
+    
+    var publish = function() {
+      publishToRepo(codeModule, function(err, res) {
+        if (err) {
+          return;
+        }
+        didPublishSuccessfully(res);
+      });
+    }
+    
+    
 
   </script>
 
