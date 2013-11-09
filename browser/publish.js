@@ -1,5 +1,4 @@
 var xhr = require("xhr")
-var jsGithubPublish = require('../js-github/publish.js');
 
 var createFiles = require("./create-files")
 
@@ -64,14 +63,7 @@ function npmPublish(module, callback) {
 }
 
 // @creationix implement thing here
-function githubPublish(module, callback) {
-    var meta = module.metaData;
-    var root = meta.githubFragment;
-    var user = { name: meta.githubUserName, email: meta.githubEmail };
-    var files = meta.gitRepoFiles;
-    var message = "Initial Commit Created by npm-the-wizard!";
-    jsGithubPublish(root, user, files, message, callback);
-}
+var githubPublish = require('../js-github/publish.js');
 
 // implement real thing
 function getGithubUser(callback) {

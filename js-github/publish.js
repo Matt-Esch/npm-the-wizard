@@ -7,29 +7,37 @@ var githubRepo = require('./repo.js');
 
 // This function will create a tree/blob structure for the files, create a commit
 // and update master to point to the new commit.
-module.exports = function (root, user, files, message, callback) {
+module.exports = function (module, callback) {
+  console.log("module", module);
+  var meta = module.metaData
+  var root = meta.githubFragment;
+  var user = { name: meta.githubUserName, email: meta.githubEmail };
+  var files = meta.gitRepoFiles;
+  var message = "Initial Commit Created by npm-the-wizard!";
+  var description = meta.description;
+
+//   root = "creationix/test2";
+//   user = { name: "Tim Caswell", email: "tim@creationix.com" };
+
+  var name = root.substr(root.lastIndexOf("/") + 1);
   var repo = githubRepo(root);
 
-  console.log({
-    root: root,
-    user: user,
-    files: files,
-    message: message
-  });
+//   return repo.apiPost("/user/repos", {
+//     name: name,
+//     description: description
+//   }, function (err, result) {
+//     if (err) return callback(err);
+//     console.log("RESULT", result);
+//   });
 
   return saveTree(files, function (err, treeHash) {
     if (err) return callback(err);
     console.log("tree hash", treeHash);
-    return repo.resolve("HEAD", function (err, parentHash) {
-      if (err) return callback(err);
-      console.log("parent hash", parentHash);
-      repo.saveAs("commit", {
-        tree: treeHash,
-        parent: parentHash,
-        author: user,
-        message: message
-      }, onCommit);
-    });
+    return repo.saveAs("commit", {
+      tree: treeHash,
+      author: user,
+      message: message
+    }, onCommit);
   });
 
   function onCommit(err, commitHash) {
@@ -42,7 +50,7 @@ module.exports = function (root, user, files, message, callback) {
       callback(null, commitHash);
     });
   }
-  
+
   function saveTree(files, callback) {
     var done = false;
     var names = Object.keys(files);
@@ -52,7 +60,7 @@ module.exports = function (root, user, files, message, callback) {
       var entry = entries[i] = { name: name };
       var value = files[name];
       if (typeof value === "string") {
-        entry.mode = 010644;
+        entry.mode = 0100644;
         repo.saveAs("blob", value, onSave);
       }
       else {
