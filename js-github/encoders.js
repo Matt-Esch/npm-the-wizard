@@ -40,7 +40,7 @@ function encodePerson(person) {
   return {
     name: person.name,
     email: person.email,
-    date: person.date.toISOString()
+    date: (person.date || new Date()).toISOString()
   };
 }
 
