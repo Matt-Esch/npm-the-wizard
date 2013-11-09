@@ -23,6 +23,7 @@ var elems = {
     demo: byId("demo"),
     docs: byId("docs"),
     test: byId("test"),
+    intro: byId("intro"),
     nameButton: byId("scroll-to-name"),
     demoButton: byId("scroll-to-demo"),
     docsButton: byId("scroll-to-docs"),
@@ -68,7 +69,7 @@ function login() {
     var githubUsername = "williamcotton";
     elems.loginButton.innerHTML = githubUsername;
     
-    elems.moduleName.focus();
+    scrollToName();
     
     return;
   
@@ -81,7 +82,7 @@ function login() {
 }
 
 elems.scroll.onscroll = function(event) {
-    var sections = [elems.name, elems.demo, elems.test, elems.docs];
+    var sections = [elems.intro, elems.name, elems.demo, elems.test, elems.docs];
     var currentSelection, i;
     for (i = 0; i < sections.length; i++) {
         var section = sections[i];
@@ -94,12 +95,15 @@ elems.scroll.onscroll = function(event) {
         for (i = 0; i < buttons.length; i++) {
             buttons[i].classList.remove("active");
         }
-        document.querySelector("#menu button." + currentSelection.id)
-            .classList.add("active");
+        console.log(currentSelection.id);
+        var e = document.querySelector("#menu button." + currentSelection.id);
+        
+        if (e) {
+          e.classList.add("active");
+        }
+            
     }
 }
-
-elems.moduleName.focus();
 
 elems.moduleName.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
@@ -116,6 +120,7 @@ elems.docsButton.addEventListener("click", scrollToDocs)
 elems.testButton.addEventListener("click", scrollToTest)
 
 function scrollToName() {
+    elems.moduleName.focus();
     scrollTo(elems.name.offsetTop-60, elems.scroll, 300, easing.easeInQuad);
 }
 
