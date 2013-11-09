@@ -35,7 +35,7 @@ server.listen(port, function (err) {
         process.exit(-1)
     }
 
-    if (process.getuid() === 0) {
+    if (process.getuid && process.getuid() === 0) {
         fs.stat(__filename, function (err, stat) {
             if (err) {
                 return console.error(err)
