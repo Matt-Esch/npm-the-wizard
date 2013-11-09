@@ -29,10 +29,6 @@ body {
   opacity: 0.0;
 }
 
-.CodeMirror {
-  height: 1200px;
-}
-
 #name {
   font-size: 20px;
 }
@@ -110,16 +106,16 @@ body {
   position: fixed;
 }
 
-#guide button.hidden, #guide .arrow.hidden {
+#guide button.hidden, #guide .arrow.hidden, #guide .slash.hidden {
   display: none;
   opacity: 0.0;
 }
 
-#guide button.invisible, #guide .arrow.invisible {
+#guide button.invisible, #guide .arrow.invisible, #guide .slash.invisible {
   opacity: 0.0;
 }
 
-#guide .arrow {
+#guide .arrow, #guide .slash {
   opacity: 1.0;
 }
 

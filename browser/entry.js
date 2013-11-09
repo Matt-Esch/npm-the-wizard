@@ -25,6 +25,7 @@ var elems = {
     docs: byId("docs"),
     test: byId("test"),
     login: byId("login"),
+    nameSlash: byId("name-slash"),
     demoArrow: byId("demo-arrow"),
     docsArrow: byId("docs-arrow"),
     testArrow: byId("test-arrow"),
@@ -81,6 +82,15 @@ function publish() {
     })
 }
 
+function fadeInElement(elem, delay) {
+  setTimeout(function() {
+    elem.classList.remove("hidden");
+    elem.classList.add("invisible");
+    elem.offsetWidth;
+    elem.classList.remove("invisible");
+  }, delay);
+}
+
 function login() {
   
     var githubUsername = "williamcotton";
@@ -92,6 +102,8 @@ function login() {
     elems.loginButton.innerHTML = githubUsername;
     
     setTimeout(function() {
+      fadeInElement(elems.nameSlash, 100);
+      fadeInElement(elems.nameButton, 120);
       scrollToName();
     }, 500);
     
@@ -146,15 +158,6 @@ elems.moduleName.addEventListener("keyup", function(event) {
     //   h.offsetWidth;
     //   h.classList.remove("invisible");
     // }
-    
-    function fadeInElement(elem, delay) {
-      setTimeout(function() {
-        elem.classList.remove("hidden");
-        elem.classList.add("invisible");
-        elem.offsetWidth;
-        elem.classList.remove("invisible");
-      }, delay);
-    }
     
     var elementsToFadeIn = [elems.demoArrow, elems.demoButton, elems.testArrow, elems.testButton, elems.docsArrow, elems.docsButton, elems.publishArrow, elems.publishButton];
     
