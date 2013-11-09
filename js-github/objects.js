@@ -5,6 +5,8 @@ var decoders = require('./decoders.js');
 // Implement the js-git object interface using github APIs
 module.exports = function (repo) {
 
+  repo.typeCache = {};
+
   // Add Object store capability to the system
   repo.load = load;     // (hash-ish) -> object
   repo.save = save;     // (object) -> hash
@@ -20,11 +22,19 @@ module.exports = function (repo) {
 
 };
 
-
-
 function load(hash, callback) {
   if (!callback) return load.bind(this, hash);
-  return callback(new Error("Raw load is not supported"));
+  var type = this.typeCache[hash];
+  if (!type) return callback(new Error("Raw load is not supported for unknown hashes"));
+  return this.loadAs(type, hash, onLoad);
+
+  function onLoad(err, body) {
+    if (err) return callback(err);
+    return callback(null, {
+      type: type,
+      body: body
+    });
+  }
 }
 
 function save(object, callback) {
@@ -47,7 +57,7 @@ function loadAs(type, hash, callback) {
     if (err) return callback(err);
     var body;
     try {
-      body = decoders[type](result);
+      body = decoders[type].call(repo, result);
     }
     catch (err) {
       return callback(err);
