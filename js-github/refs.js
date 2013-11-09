@@ -77,7 +77,15 @@ function setHead(branchName, callback) {
 
 function readRef(ref, callback) {
   if (!callback) return readRef.bind(this, ref);
-  throw "TODO: Implement repo.readRef";
+  if (!(/^ref\//).test(ref)) {
+    return callback(new Error("Invalid ref: " + ref));
+  }
+  return this.apiGet("/repos/:root/git/" + ref, onRef);
+
+  function onRef(err, result) {
+    if (err) return callback(err);
+    return callback(null, result.object.sha);
+  }
 }
 
 function writeRef(ref, hash, callback) {
