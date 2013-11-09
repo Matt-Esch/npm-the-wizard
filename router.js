@@ -3,6 +3,8 @@ var ServeBrowserify = require("serve-browserify")
 var path = require("path")
 var st = require("st")
 
+var auth = require("./routes/auth.js")
+
 var router = Router()
 
 router.addRoute("/", function (req, res) {
@@ -12,6 +14,8 @@ router.addRoute("/", function (req, res) {
     res.writeHead(200, { "Content-Type": "text/html" })
     res.end("<html><body>" + voteko + "<script src='entry.js'></script></body></html>\n")
 })
+
+router.addRoute("/auth/:code", auth)
 
 var mount = st({
     path: path.join(__dirname, "static"),
