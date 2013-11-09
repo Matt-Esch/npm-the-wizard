@@ -4,7 +4,7 @@ var window = require("global/window")
 var easing = require("./lib/easing.js")
 var scrollTo = require("./lib/scroll-to")
 
-var codeModule;
+var codeModule = {}
 
 var scrollElement = document.getElementById("right-panel");
 var demoElement = document.getElementById("demo");
@@ -41,22 +41,6 @@ window.scrollToDocs = function() {
 window.scrollToTest = function() {
   scrollTo(testElement.offsetTop-20, scrollElement, 300, easing.easeInQuad);
 }
-
-var NpmGitGithub = {
-  publish: function(codeModule, callback) {
-    var name = codeModule.name;
-    var deps = codeModule.deps;
-    var metaData = codeModule.metaData;
-    var sourceCode = codeModule.sourceCode;
-    callback(false, {
-      name: name,
-      message: "didPublishSuccessfully",
-      code: 200
-    });
-  }
-}
-
-var publishToRepo = NpmGitGithub.publish;
 
 var didPublishSuccessfully = function(res) {
   
