@@ -2,7 +2,7 @@ var sendError = require("send-data/error")
 var sendJson = require("send-data/json")
 var jsonBody = require("body/json")
 
-var publish = require("./publish-npm")
+var publish = require("../publish-npm")
 
 module.exports = publishRoute
 

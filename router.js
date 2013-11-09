@@ -11,14 +11,7 @@ var indexHtml = fs.readFileSync(path.join(__dirname, "static", "index.html"))
 var router = Router()
 
 router.addRoute("/", function (req, res) {
-    sendHtml(req, res, indexHtml)
-
-
-    // http://blog.nodeknockout.com/post/35364532732/protip-add-the-vote-ko-badge-to-your-app
-    var voteko = "<iframe src='http://nodeknockout.com/iframe/team-mad-science' frameborder=0 scrolling=no allowtransparency=true width=115 height=25></iframe>"
-
-    res.writeHead(200, { "Content-Type": "text/html" })
-    res.end("<html><body>" + voteko + "<script src='entry.js'></script></body></html>\n")
+    sendHtml(req, res, String(indexHtml))
 })
 
 router.addRoute("/auth/:code", auth)
