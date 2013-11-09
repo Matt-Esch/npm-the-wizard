@@ -5,7 +5,12 @@ var easing = require("./lib/easing.js")
 var scrollTo = require("./lib/scroll-to")
 var publishToRepo = require("./publish.js")
 
-var codeModule = {}
+var codeModule = {
+  name: "my-module",
+  metaData: {},
+  dependencies: [],
+  code: "module.exports = 'my code'"
+}
 
 var scrollElement = document.getElementById("right-panel");
 var demoElement = document.getElementById("demo");
