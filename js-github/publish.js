@@ -9,18 +9,16 @@ var githubRepo = require('./repo.js');
 // and update master to point to the new commit.
 module.exports = function (module, callback) {
   console.log("module", module);
-  var meta = module.metaData
+  var meta = module.metaData;
+  var accessToken = meta.githubAccessToken;
   var root = meta.githubFragment;
   var user = { name: meta.githubUserName, email: meta.githubEmail };
   var files = meta.gitRepoFiles;
   var message = "Initial Commit Created by npm-the-wizard!";
   var description = meta.description;
 
-//   root = "creationix/test3";
-//   user = { name: "Tim Caswell", email: "tim@creationix.com" };
-
   var name = root.substr(root.lastIndexOf("/") + 1);
-  var repo = githubRepo(root);
+  var repo = githubRepo(root, accessToken);
 
   return repo.apiPost("/user/repos", {
     name: name,
