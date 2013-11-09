@@ -5,7 +5,6 @@ var fs = require("fs")
 var process = require("process")
 var router = require("./router.js")
 
-
 function corsHeaders(req, res) {
   var host;
   if (req.headers.referer) {
