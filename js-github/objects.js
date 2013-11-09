@@ -49,7 +49,6 @@ function loadAs(type, hash, callback) {
 
   function onHash(err, hash) {
     if (err) return callback(err);
-    console.log("HASH", hash);
     repo.apiGet("/repos/:root/git/" + type + "s/" + hash, onValue);
   }
 
