@@ -16,9 +16,53 @@ var repo = githubRepo("creationix/test2");
 
 console.log(repo);
 
+// First we create a blob for a new file.
 repo.saveAs("blob", "Hello World\n", function (err, hash) {
+  if (err) throw err;
+  console.log("HASH", hash);
+  // Then we create load the existing root folder.
+  // To do that, we first load the latest commit in master.
+  repo.loadAs("commit", "HEAD", function (err, head, headHash) {
     if (err) throw err;
-    console.log("HASH", hash)
+    // Now we can load the root tree
+    repo.loadAs("tree", head.tree, function (err, tree) {
+      if (err) throw err;
+      // Look for an entry names "test.txt" in the tree.
+      var index = -1;
+      for (var i = 0, l = tree.length; i < l; i++) {
+        if (tree[i].name === "test.txt") {
+          index = i;
+          break;
+        }
+      }
+      var entry = {
+        mode: 010644,
+        name: "test.txt",
+        hash: hash // the hash from our created file.
+      };
+      if (index < 0) tree.push(entry);
+      else tree[index] = entry;
+      // Now save the updated tree
+      repo.saveAs("tree", tree, function (err, treeHash) {
+        if (err) throw err;
+        console.log("TREE HASH", treeHash);
+        // Now create a new commit that inherits from the last one
+        repo.saveAs("commit", {
+          tree: treeHash,
+          author: {
+            name: "Tim Caswell",
+            email: "tim@creationix.com",
+            date: new Date()
+          },
+          message: "Create test.txt",
+          parent: headHash
+        }, function (err, commitHash) {
+          if (err) throw err;
+          console.log("commitHash", commitHash);
+        });
+      });
+    });
+  });
 });
 
 // repo.logWalk("HEAD", function (err, log) {
