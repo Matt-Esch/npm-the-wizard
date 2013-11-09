@@ -1,4 +1,7 @@
 var isHash = require('./ishash.js');
+var bops = require('bops');
+var decoders = require('./decoders.js');
+
 // Implement the js-git object interface using github APIs
 module.exports = function (repo) {
 
@@ -17,15 +20,11 @@ module.exports = function (repo) {
 
 };
 
+
+
 function load(hash, callback) {
   if (!callback) return load.bind(this, hash);
-  var root = this.root;
-  return this.resolve(hash, onHash);
-
-  function onHash(err, hash) {
-    if (err) return callback(err);
-    callback("TODO: Implement repo.load");
-  }
+  return callback(new Error("Raw load is not supported"));
 }
 
 function save(object, callback) {
@@ -35,7 +34,26 @@ function save(object, callback) {
 
 function loadAs(type, hash, callback) {
   if (!callback) return loadAs.bind(this, type, hash);
-  throw "TODO: Implement repo.loadAs()";
+  var repo = this;
+  return repo.resolve(hash, onHash);
+
+  function onHash(err, hash) {
+    if (err) return callback(err);
+    console.log("HASH", hash);
+    repo.apiGet("/repos/:root/git/" + type + "s/" + hash, onValue);
+  }
+
+  function onValue(err, result) {
+    if (err) return callback(err);
+    var body;
+    try {
+      body = decoders[type](result);
+    }
+    catch (err) {
+      return callback(err);
+    }
+    return callback(null, body);
+  }
 }
 
 function saveAs(type, body, callback) {
@@ -47,3 +65,5 @@ function remove(hash, callback) {
   if (!callback) return remove.bind(this, hash);
   throw "TODO: Implement repo.remove()";
 }
+
+

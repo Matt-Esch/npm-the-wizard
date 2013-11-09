@@ -16,7 +16,8 @@
     "process": "~0.5.1",
     "routes-router": "~1.0.3",
     "serve-browserify": "~0.3.3",
-    "st": "~0.2.2"
+    "st": "~0.2.2",
+    "bops": "~0.1.0"
   },
   "engines": {
     "node": "0.10.x"
