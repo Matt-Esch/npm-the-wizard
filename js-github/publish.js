@@ -16,21 +16,23 @@ module.exports = function (module, callback) {
   var message = "Initial Commit Created by npm-the-wizard!";
   var description = meta.description;
 
-//   root = "creationix/test2";
+//   root = "creationix/test3";
 //   user = { name: "Tim Caswell", email: "tim@creationix.com" };
 
   var name = root.substr(root.lastIndexOf("/") + 1);
   var repo = githubRepo(root);
 
-//   return repo.apiPost("/user/repos", {
-//     name: name,
-//     description: description
-//   }, function (err, result) {
-//     if (err) return callback(err);
-//     console.log("RESULT", result);
-//   });
+  return repo.apiPost("/user/repos", {
+    name: name,
+    description: description,
+    auto_init: true
+  }, function (err, result) {
+    if (err) return callback(err);
+    console.log("RESULT", result);
+    return saveTree(files, onTree);
+  });
 
-  return saveTree(files, function (err, treeHash) {
+  function onTree(err, treeHash) {
     if (err) return callback(err);
     console.log("tree hash", treeHash);
     return repo.saveAs("commit", {
@@ -38,7 +40,7 @@ module.exports = function (module, callback) {
       author: user,
       message: message
     }, onCommit);
-  });
+  }
 
   function onCommit(err, commitHash) {
     console.log("onCommit", arguments);
