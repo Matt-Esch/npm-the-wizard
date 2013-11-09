@@ -15,7 +15,7 @@ router.addRoute("/", function (req, res) {
     mount(req, res)
 })
 
-router.addRoute("/auth/:code", auth)
+router.addRoute("/auth", auth)
 
 var mount = st({
     path: path.join(__dirname, "static"),

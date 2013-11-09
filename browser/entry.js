@@ -18,6 +18,8 @@ var codeModule = {
 
 var Editor = require("./editor.js")
 
+window.auth = require("./lib/auth.js")
+
 var elems = {
     scroll: byId("rightPanel"),
     name: byId("name"),

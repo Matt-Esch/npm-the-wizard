@@ -20,4 +20,4 @@ tags
 .npmrc
 publish-npm/config.json
 publish-npm/modules
-config/github-auth.json
+config/github*
