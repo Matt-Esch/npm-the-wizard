@@ -1,0 +1,91 @@
+html, body {
+  height: 100%
+}
+
+body {
+  height:100%; 
+  min-height:100%; 
+  position:relative;
+}
+
+* {
+  font-family: Helvetica;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+#sitewrapper {
+  overflow: hidden;
+}
+
+#leftPanel {
+  background-color: #ddd;
+  height: 600px;
+  width: 50%;
+  float: left;
+}
+
+#name {
+  float: right;
+  text-align: right;
+  padding: 10px 10px 10px 10px;
+  font-size: 20px;
+}
+
+#name input {
+  font-size: 20px;
+}
+
+#sourceCode {
+  background-color: black;
+  font-family: monospace;
+  font-size: 12px;
+  color: white;
+  height: 591px;
+  width: 1086px;
+}
+
+#rightPanel {
+  width: 50%;
+  height:100%; 
+  min-height:100%; 
+  position: absolute; 
+  top: 0; 
+  right: 0; 
+  bottom: 0;
+  overflow: scroll;
+  float: right;
+  background-color: white;
+}
+
+#docs, #demo, #test {
+  margin: 20px;
+  height: 800px;
+}
+
+#menu {
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
+#menu button {
+  font-size: 16px;
+  padding: 3px;
+  border: 1px solid #ddd;
+  background-color: white;
+}
+
+#menu button.active {
+  background-color: hsla(240, 70%, 90%, 1.0);
+}
+
+#menu button:focus {
+  outline: none;
+}
+
+#menu button.publish {
+  font-size: 22px;
+}

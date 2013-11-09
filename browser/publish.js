@@ -1,5 +1,7 @@
 var xhr = require("xhr")
 
+var createFiles = require("./create-files")
+
 module.exports = publishModule
 
 /*  publishModule := ({
@@ -11,20 +13,34 @@ module.exports = publishModule
 
 */
 function publishModule(module, callback) {
-    getGithubUser(function (err, userName) {
+    getGithubUser(function (err, user) {
         if (err) {
             return callback(err)
         }
 
-        module.metaData.githubUserName = userName
-        module.metaData.githubFragment = userName + "/" + module.name
+        module.metaData.githubUserName = user.name
+        module.metaData.githubEmail = user.email
+        module.metaData.githubFragment = user.name + "/" + module.name
 
-        githubPublish(module, function (err) {
+        createFiles(module, function (err, files) {
             if (err) {
                 return callback(err)
             }
 
-            npmPublish(module, callback)
+            console.log("files", files)
+
+            files["index.js"] = module.sourceCode
+
+            module.metaData.gitRepoFiles = files
+
+            githubPublish(module, function (err) {
+                if (err) {
+                    return callback(err)
+                }
+
+                // npmPublish(module, callback)
+                callback(null, { code: 200, message: "ok" })
+            })
         })
     })
 }
@@ -53,5 +69,5 @@ function githubPublish(module, callback) {
 
 // implement real thing
 function getGithubUser(callback) {
-    callback(null, "Raynos")
+    callback(null, JSON.parse(localStorage.getItem("github_details")))
 }

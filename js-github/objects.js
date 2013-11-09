@@ -1,6 +1,6 @@
 var isHash = require('./ishash.js');
-var bops = require('bops');
 var decoders = require('./decoders.js');
+var encoders = require('./encoders.js');
 
 // Implement the js-git object interface using github APIs
 module.exports = function (repo) {
@@ -39,7 +39,19 @@ function load(hash, callback) {
 
 function save(object, callback) {
   if (!callback) return save.bind(this, object);
-  throw "TODO: Implement repo.save()";
+  var request;
+  try {
+    request = encoders[object.type](object.body);
+  }
+  catch (err) {
+    return callback(err);
+  }
+  return this.apiPost("/repos/:root/git/" + object.type + "s", request, onWrite);
+
+  function onWrite(err, result) {
+    if (err) return callback(err);
+    return callback(null, result.sha);
+  }
 }
 
 function loadAs(type, hash, callback) {
@@ -69,7 +81,8 @@ function loadAs(type, hash, callback) {
 
 function saveAs(type, body, callback) {
   if (!callback) return saveAs.bind(this, type, body);
-  throw "TODO: Implement repo.saveAs()";
+  if (type === "text") type = "blob";
+  return this.save({ type: type, body: body }, callback);
 }
 
 function remove(hash, callback) {

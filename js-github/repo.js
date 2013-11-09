@@ -1,6 +1,7 @@
 module.exports = function (root) {
   var repo = {
-    apiGet: apiGet
+    apiGet: apiGet,
+    apiPost: apiPost
   };
   var auth = document.location.search.substr(1);
 
@@ -34,6 +35,36 @@ module.exports = function (root) {
       return callback(null, response);
     };
     xhr.send();
+  }
+
+  function apiPost(url, body, callback) {
+    url = 'https://api.github.com' + url.replace(":root", root);
+    var json;
+    try {
+      json = JSON.stringify(body);
+    }
+    catch (err) {
+      return callback(err);
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader("Authorization", "Basic " + auth);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState !== 4) return;
+      if (xhr.status !== 201) {
+        return callback(new Error("Invalid HTTP response: " + xhr.status));
+      }
+      var response;
+      try {
+        response = JSON.parse(xhr.responseText);
+      }
+      catch (err) {
+        return callback(err);
+      }
+      return callback(null, response);
+    };
+    xhr.send(json);
   }
 
 };
