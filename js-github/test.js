@@ -1,14 +1,14 @@
 
-  var log = console.log = console.error = require('domlog');
-  log.setup({
-    whiteSpace: "pre-wrap",
-    lineHeight: "1em",
-    transition: "inherit",
-    background: "#000",
-    top: "0",
-    height: "100%",
-    overflow: "auto",
-  });
+//   var log = console.log = console.error = require('domlog');
+//   log.setup({
+//     whiteSpace: "pre-wrap",
+//     lineHeight: "1em",
+//     transition: "inherit",
+//     background: "#000",
+//     top: "0",
+//     height: "100%",
+//     overflow: "auto",
+//   });
 
 var githubRepo = require('./repo.js');
 
