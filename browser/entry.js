@@ -4,7 +4,7 @@ var byId = require("by/id")
 var easing = require("./lib/easing.js")
 var scrollTo = require("./lib/scroll-to")
 var publishToRepo = require("./publish.js")
-var login = require("./lib/auth.js")
+//var login = require("./lib/auth.js")
 
 var codeModule = {
   name: "my-module",
@@ -21,13 +21,16 @@ var demoButton = byId("scroll-to-demo")
 var docsButton = byId("scroll-to-docs")
 var testButton = byId("scroll-to-test")
 var publishButton = byId("publish")
+var loginButton = byId("login")
+var moduleNameElement = byId("moduleName")
+var sourceCodeElement = byId("sourceCode")
 
 scrollElement.onscroll = function(event) {
   var sections = [demoElement, docsElement, testElement];
   var currentSelection, i;
   for (i = 0; i < sections.length; i++) {
     var section = sections[i];
-    if (scrollElement.scrollTop > section.offsetTop - 21) {
+    if (scrollElement.scrollTop > section.offsetTop - 61) {
       currentSelection = section;
     }
   }
@@ -45,17 +48,18 @@ demoButton.addEventListener("click", scrollToDemo)
 docsButton.addEventListener("click", scrollToDocs)
 testButton.addEventListener("click", scrollToTest)
 publishButton.addEventListener("click", publish)
+loginButton.addEventListener("click", login)
 
 function scrollToDemo() {
-  scrollTo(demoElement.offsetTop-20, scrollElement, 300, easing.easeInQuad);
+  scrollTo(demoElement.offsetTop-60, scrollElement, 300, easing.easeInQuad);
 }
 
 function scrollToDocs() {
-  scrollTo(docsElement.offsetTop-20, scrollElement, 300, easing.easeInQuad);
+  scrollTo(docsElement.offsetTop-60, scrollElement, 300, easing.easeInQuad);
 }
 
 function scrollToTest() {
-  scrollTo(testElement.offsetTop-20, scrollElement, 300, easing.easeInQuad);
+  scrollTo(testElement.offsetTop-60, scrollElement, 300, easing.easeInQuad);
 }
 
 window.moduleNameChange = function() {

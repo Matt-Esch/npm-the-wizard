@@ -59,16 +59,20 @@ body {
   background-color: white;
 }
 
+#rightPanel h1 {
+  display: none;
+}
+
 #docs, #demo, #test {
-  margin: 20px;
+  margin: 60px 20px 20px 20px;
   height: 800px;
 }
 
 #menu {
   padding: 10px;
   position: fixed;
-  bottom: 0;
-  right: 0;
+  top: 0;
+  left: 50%;
 }
 
 #menu button {
