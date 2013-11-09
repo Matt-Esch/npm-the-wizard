@@ -4,10 +4,13 @@ var window = require("global/window")
 var easing = require("./lib/easing.js")
 var scrollTo = require("./lib/scroll-to")
 var publishToRepo = require("./publish.js")
+var login = require("./lib/auth.js")
 
 var codeModule = {}
 
-var scrollElement = document.getElementById("right-panel");
+var sourceCodeElement = document.getElementById("sourceCode");
+var moduleNameElement = document.getElementById("moduleName");
+var scrollElement = document.getElementById("rightPanel");
 var demoElement = document.getElementById("demo");
 var docsElement = document.getElementById("docs");
 var testElement = document.getElementById("test");
@@ -42,6 +45,16 @@ window.scrollToDocs = function() {
 window.scrollToTest = function() {
   scrollTo(testElement.offsetTop-20, scrollElement, 300, easing.easeInQuad);
 }
+
+window.moduleNameChange = function() {
+  codeModule.name = moduleNameElement.value;
+}
+window.moduleNameChange();
+
+window.sourceCodeChange = function() {
+  codeModule.sourceCode = sourceCodeElement.value;
+}
+window.sourceCodeChange();
 
 var didPublishSuccessfully = function(res) {
   
