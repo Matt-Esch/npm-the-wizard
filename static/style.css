@@ -69,14 +69,14 @@ body {
 }
 
 #menu {
-  padding: 10px;
+  padding: 10px 10px 10px 20px;
   position: fixed;
   top: 0;
   left: 50%;
 }
 
 #menu button {
-  font-size: 16px;
+  font-size: 26px;
   padding: 3px;
   border: 1px solid #ddd;
   background-color: white;
@@ -88,8 +88,4 @@ body {
 
 #menu button:focus {
   outline: none;
-}
-
-#menu button.publish {
-  font-size: 22px;
 }
