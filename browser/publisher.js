@@ -10,18 +10,20 @@ var codeModule = {
 
 module.exports = Publisher
 
-function Publisher(elems) {
+function Publisher(elems, mirror) {
     elems.publishButton.addEventListener("click", publish)
     elems.loginButton.addEventListener("click", login)
     elems.moduleName.addEventListener("keyup", moduleNameChange)
-    elems.sourceCode.addEventListener("keyup", sourceCodeChange)
+
+    mirror.on("change", sourceCodeChange)
+    mirror.setValue(codeModule.sourceCode)
 
     function moduleNameChange() {
         codeModule.name = elems.moduleName.value;
     }
 
     function sourceCodeChange() {
-        codeModule.sourceCode = elems.sourceCode.value;
+        codeModule.sourceCode = mirror.getValue();
     }
 
     function publish() {

@@ -37,7 +37,7 @@ body {
   font-size: 20px;
 }
 
-#sourceCode {
+/*#sourceCode {
   background-color: black;
   font-family: monospace;
   font-size: 12px;
@@ -45,7 +45,7 @@ body {
   height: 591px;
   width: 1086px;
 }
-
+*/
 #rightPanel {
   width: 50%;
   height:100%; 

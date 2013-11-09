@@ -1,7 +1,6 @@
 // var document = require("global/document")
 var byId = require("by/id")
 
-
 var Editor = require("./editor.js")
 var Scroller = require("./scroller.js")
 var Publisher = require("./publisher.js")
@@ -21,7 +20,7 @@ var elems = {
 }
 
 Scroller(elems)
-Editor(elems)
-Publisher(elems)
+var mirror = Editor(elems)
+Publisher(elems, mirror)
 
 require("../js-github/test.js")
