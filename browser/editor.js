@@ -1,5 +1,5 @@
 module.exports = Editor
 
-function Editor(elems) {
+function Editor(elems, codeModule) {
     
 }
