@@ -90,7 +90,15 @@ function readRef(ref, callback) {
 
 function writeRef(ref, hash, callback) {
   if (!callback) return writeRef(this, ref, hash);
-  throw "TODO: Implement repo.writeRef";
+  if (!(/^ref\//).test(ref)) {
+    return callback(new Error("Invalid ref: " + ref));
+  }
+  this.apiPost("/repos/:root/git/ref", {
+    sha: hash
+  }, function (err) {
+    if (err) return callback(err);
+    callback();
+  });
 }
 
 function deleteRef(ref, callback) {

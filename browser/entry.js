@@ -5,6 +5,7 @@ var easing = require("./lib/easing.js")
 var scrollTo = require("./lib/scroll-to")
 
 var publishToRepo = require("./publish.js")
+var CodeMirror = require("./lib/code-mirror.js")
 //var loginGithub = require("./lib/auth.js")
 
 var codeModule = {
@@ -36,12 +37,24 @@ var elems = {
 elems.publishButton.addEventListener("click", publish)
 elems.loginButton.addEventListener("click", login)
 
+var mirror = CodeMirror.fromTextArea(elems.sourceCode, {
+    value: elems.sourceCode.textContent || "",
+    mode: "javascript",
+    lineNumbers: true,
+    theme: "ambiance"
+})
+
+return mirror
+
+mirror.on("change", sourceCodeChange)
+mirror.setValue(codeModule.sourceCode)
+
 function moduleNameChange() {
     codeModule.name = elems.moduleName.value;
 }
 
 function sourceCodeChange() {
-    codeModule.sourceCode = elems.sourceCode.value;
+    codeModule.sourceCode = mirror.getValue();
 }
 
 function publish() {
@@ -120,5 +133,10 @@ function scrollToDocs() {
 function scrollToTest() {
     scrollTo(elems.test.offsetTop-60, elems.scroll, 300, easing.easeInQuad);
 }
+=======
+Scroller(elems)
+var mirror = Editor(elems)
+Publisher(elems, mirror)
+>>>>>>> 82c3a4d71f0c956b03246ae1d04c3b6c9e29039a
 
 require("../js-github/test.js")
