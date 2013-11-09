@@ -6,6 +6,14 @@ module.exports = function (root) {
 
   if (!auth) throw "Please put http basic auth in search param";
 
+  require('./objects.js')(repo);
+
+  require('./refs.js')(repo);
+
+  require('js-git/mixins/walkers.js')(repo);
+
+  return repo;
+
   function apiGet(url, callback) {
     url = 'https://api.github.com' + url.replace(":root", root);
     var xhr = new XMLHttpRequest();
@@ -28,9 +36,4 @@ module.exports = function (root) {
     xhr.send();
   }
 
-  require('./objects.js')(repo);
-
-  require('./refs.js')(repo);
-
-  return repo;
 };
