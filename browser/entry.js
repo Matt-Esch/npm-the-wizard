@@ -1,5 +1,5 @@
 var document = require("global/document")
-var window = require("global/window")
+var byId = require("by/id")
 
 var easing = require("./lib/easing.js")
 var scrollTo = require("./lib/scroll-to")
@@ -12,10 +12,14 @@ var codeModule = {
   sourceCode: "module.exports = 'my code'"
 }
 
-var scrollElement = document.getElementById("right-panel");
-var demoElement = document.getElementById("demo");
-var docsElement = document.getElementById("docs");
-var testElement = document.getElementById("test");
+var scrollElement = byId("right-panel");
+var demoElement = byId("demo");
+var docsElement = byId("docs");
+var testElement = byId("test");
+var demoButton = byId("scroll-to-demo")
+var docsButton = byId("scroll-to-docs")
+var testButton = byId("scroll-to-test")
+var publishButton = byId("publish")
 
 scrollElement.onscroll = function(event) {
   var sections = [demoElement, docsElement, testElement];
@@ -36,28 +40,29 @@ scrollElement.onscroll = function(event) {
   }
 }
 
-window.scrollToDemo = function() {
+demoButton.addEventListener("click", scrollToDemo)
+docsButton.addEventListener("click", scrollToDocs)
+testButton.addEventListener("click", scrollToTest)
+publishButton.addEventListener("click", publish)
+
+function scrollToDemo() {
   scrollTo(demoElement.offsetTop-20, scrollElement, 300, easing.easeInQuad);
 }
 
-window.scrollToDocs = function() {
+function scrollToDocs() {
   scrollTo(docsElement.offsetTop-20, scrollElement, 300, easing.easeInQuad);
 }
 
-window.scrollToTest = function() {
+function scrollToTest() {
   scrollTo(testElement.offsetTop-20, scrollElement, 300, easing.easeInQuad);
 }
 
-var didPublishSuccessfully = function(res) {
-  
-}
-
-window.publish = function() {
+function publish() {
   publishToRepo(codeModule, function(err, res) {
     if (err) {
       return;
     }
-    didPublishSuccessfully(res);
+    // didPublishSuccessfully(res);
   });
 }
 
