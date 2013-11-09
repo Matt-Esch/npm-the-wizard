@@ -9,6 +9,8 @@
 </head>
 <body>
   
+  <div id="blackout"></div>
+  
   <div id="sitewrapper">
   
     <div id="leftPanel">
@@ -24,6 +26,8 @@
         <button id="loginButton" class="login active">Login</button>
         <span id="name-slash" class="name slash hidden">/</span>
         <button id="scroll-to-name" class="name hidden">Name</button>
+        <span id="deps-arrow" class="deps arrow hidden">⇢</span>
+        <button id="scroll-to-deps" class="deps hidden">Deps</button>
         <span id="demo-arrow" class="demo arrow hidden">⇢</span>
         <button id="scroll-to-demo" class="demo hidden">Demo</button>
         <span id="test-arrow" class="test arrow hidden">⇢</span>
@@ -44,25 +48,30 @@
         <p>
           Your module needs a name. This name will be used to create a repository on GitHub as well as name your module for npm.
         </p>
+      </div>
+      
+      <div id="deps">
         <p>
-          Choose wisely...
+          Does your module have any dependencies?
         </p>
       </div>
       
       <div id="demo">
-        
-        <h1>DEMO</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <p>
+          A demonstration will help developers to understand how to use your module.
+        </p>
       </div>
       
       <div id="test">
-        <h1>TEST</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <p>
+          Tests will add a layer of robustness and trust to your module and make it more likely yo be used by the community.
+        </p>
       </div>
       
       <div id="docs">
-        <h1>DOCS</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <p>
+          A full set of API calls would be great!
+        </p>
       </div>
 
     </div>

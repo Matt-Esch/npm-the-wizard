@@ -22,23 +22,94 @@ var elems = {
     scroll: byId("rightPanel"),
     name: byId("name"),
     demo: byId("demo"),
+    deps: byId("deps"),
     docs: byId("docs"),
     test: byId("test"),
     login: byId("login"),
     nameSlash: byId("name-slash"),
     demoArrow: byId("demo-arrow"),
+    depsArrow: byId("deps-arrow"),
     docsArrow: byId("docs-arrow"),
     testArrow: byId("test-arrow"),
     publishArrow: byId("publish-arrow"),
     nameButton: byId("scroll-to-name"),
+    depsButton: byId("scroll-to-deps"),
     demoButton: byId("scroll-to-demo"),
     docsButton: byId("scroll-to-docs"),
     testButton: byId("scroll-to-test"),
     publishButton: byId("publish"),
     loginButton: byId("loginButton"),
     moduleName: byId("moduleName"),
-    sourceCode: byId("sourceCode")
+    sourceCode: byId("sourceCode"),
+    blackout: byId("blackout")
 }
+
+guideSteps = [
+  {
+    name: "login",
+    buttonElement: elems.loginButton,
+    element: elems.login,
+    onSet: function() {
+      
+    }
+  },
+  {
+    name: "name",
+    buttonElement: elems.nameButton,
+    element: elems.name,
+    onSet: function() {
+      setTimeout(function() {
+        elems.moduleName.focus();
+      }, 120);
+    }
+  },
+  {
+    name: "deps",
+    buttonElement: elems.depsButton,
+    element: elems.deps
+  },
+  {
+    name: "demo",
+    buttonElement: elems.demoButton,
+    element: elems.demo
+  },
+  {
+    name: "test",
+    buttonElement: elems.testButton,
+    element: elems.test
+  },
+  {
+    name: "docs",
+    buttonElement: elems.docsButton,
+    element: elems.docs
+  },
+  {
+    name: "publish",
+    buttonElement: elems.publishButton,
+    element: elems.publish
+  }
+];
+
+function createScrollToCommand(step) {
+  step.scrollToCommand = function() {
+    scrollTo(step.element.offsetTop-60, elems.scroll, 120, easing.easeInQuad);
+    if (step.onSet) {
+      step.onSet();
+    }
+  }
+}
+function addScrollToCommandsToStep(guideSteps) {
+  for (var i = 0; i < guideSteps.length; i++) {
+    var step = guideSteps[i];
+    createScrollToCommand(step);
+  }
+}
+addScrollToCommandsToStep(guideSteps);
+
+
+var currentStep = 0;
+
+
 
 elems.publishButton.addEventListener("click", publish)
 elems.loginButton.addEventListener("click", login)
@@ -94,19 +165,39 @@ function fadeInElement(elem, delay) {
 function login() {
   
     var githubUsername = "williamcotton";
+    elems.loginButton.innerHTML = githubUsername;
+    
     elems.loginButton.offsetWidth;
     elems.guide.classList.remove("login");
     elems.guide.classList.add("settled");
     guide.style.marginLeft = "0px";
     guide.style.marginTop = "0px";
-    elems.loginButton.innerHTML = githubUsername;
-    
     setTimeout(function() {
-      fadeInElement(elems.nameSlash, 100);
-      fadeInElement(elems.nameButton, 120);
-      scrollToName();
+      document.body.classList.add("loggedIn");
+      setTimeout(function() {
+        elems.blackout.style.display = "none";
+      })
+      fadeInElement(elems.nameSlash, 1);
+      fadeInElement(elems.nameButton, 20);
+      goToNextStep();
+      
     }, 500);
     
+    var hasFaded = false;
+    setTimeout(function() {
+      elems.scroll.addEventListener("scroll", function() {
+        if (!hasFaded) {
+          fadeInTheRest();
+          hasFaded = true;
+        }
+      });
+    }, 1200);
+    
+    document.body.addEventListener("keyup", function(event) {
+      if ((event.keyCode == 78 || event.keyCode == 13) && document.body == document.activeElement) {
+        goToNextStep();
+      }
+    });
     
     return;
   
@@ -119,7 +210,7 @@ function login() {
 }
 
 elems.scroll.onscroll = function(event) {
-    var sections = [elems.login, elems.name, elems.demo, elems.test, elems.docs];
+    var sections = [elems.login, elems.name, elems.deps, elems.demo, elems.test, elems.docs];
     var currentSelection, i;
     for (i = 0; i < sections.length; i++) {
         var section = sections[i];
@@ -128,11 +219,13 @@ elems.scroll.onscroll = function(event) {
         }
     }
     if (currentSelection.id) {
+      
+        currentStep = getStepNumByName(currentSelection.id);
+      
         var buttons = document.querySelectorAll("#guide button");
         for (i = 0; i < buttons.length; i++) {
             buttons[i].classList.remove("active");
         }
-        console.log(currentSelection.id);
         var e = document.querySelector("#guide button." + currentSelection.id);
         
         if (e) {
@@ -142,56 +235,74 @@ elems.scroll.onscroll = function(event) {
     }
 }
 
+getStepByName = function(name) {
+  var step;
+  guideSteps.forEach(function(s,i) {
+    if (s.name == name) {
+      step = s;
+    }
+  });
+  return step;
+}
+
+getStepNumByName = function(name) {
+  var num;
+  guideSteps.forEach(function(step,i) {
+    if (step.name == name) {
+      num = i;
+    }
+  });
+  return num;
+}
+
+getStepNameByNum = function(num) {
+  return guideSteps[num].name;
+}
+
+function fadeInTheRest() {
+  var elementsToFadeIn = [elems.depsArrow, elems.depsButton, elems.demoArrow, elems.demoButton, elems.testArrow, elems.testButton, elems.docsArrow, elems.docsButton, elems.publishArrow, elems.publishButton];
+  for (var i = 0; i < elementsToFadeIn.length; i++) {
+    fadeInElement(elementsToFadeIn[i],i*30+300);
+  }
+}
+
+function submitName() {
+  goToNextStep()
+  elems.moduleName.blur();
+  var name = elems.moduleName.value;
+  elems.nameButton.innerHTML = name;
+  fadeInTheRest();
+  codeModule.name = name;
+}
+
 elems.moduleName.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
-    scrollToDemo();
-    
-    var name = elems.moduleName.value;
-    elems.nameButton.innerHTML = name;
-    
-    var hiddenElems = elems.guide.querySelectorAll(".hidden");
-    
-    // for (var i = 0; i < hiddenElems.length; i++) {
-    //   var h = hiddenElems[i];
-    //   h.classList.remove("hidden");
-    //   h.classList.add("invisible");
-    //   h.offsetWidth;
-    //   h.classList.remove("invisible");
-    // }
-    
-    var elementsToFadeIn = [elems.demoArrow, elems.demoButton, elems.testArrow, elems.testButton, elems.docsArrow, elems.docsButton, elems.publishArrow, elems.publishButton];
-    
-    for (var i = 0; i < elementsToFadeIn.length; i++) {
-      fadeInElement(elementsToFadeIn[i],i*30+300);
-    }
-    
-    codeModule.name = name;
+    submitName();
   }
 });
 
-elems.nameButton.addEventListener("click", scrollToName)
-elems.demoButton.addEventListener("click", scrollToDemo)
-elems.docsButton.addEventListener("click", scrollToDocs)
-elems.testButton.addEventListener("click", scrollToTest)
-
-function scrollToName() {
-    scrollTo(elems.name.offsetTop-60, elems.scroll, 120, easing.easeInQuad);
-    setTimeout(function() {
-      elems.moduleName.focus();
-    }, 120);
+function goToNextStep() {
+  return goToStep(currentStep + 1);
 }
 
-function scrollToDemo() {
-    scrollTo(elems.demo.offsetTop-60, elems.scroll, 120, easing.easeInQuad);
+function goToStep(name_or_number) {
+  var name, num;
+  if (typeof(name_or_number) == "string") {
+    name = name_or_number;
+    num = getStepNumByName(name);
+  }
+  else {
+    num = name_or_number;
+    name = getStepNameByNum(num);
+  }
+  return guideSteps[num].scrollToCommand();
 }
 
-function scrollToDocs() {
-    scrollTo(elems.docs.offsetTop-60, elems.scroll, 120, easing.easeInQuad);
-}
-
-function scrollToTest() {
-    scrollTo(elems.test.offsetTop-60, elems.scroll, 120, easing.easeInQuad);
-}
+elems.nameButton.addEventListener("click", getStepByName("name").scrollToCommand)
+elems.depsButton.addEventListener("click", getStepByName("deps").scrollToCommand)
+elems.demoButton.addEventListener("click", getStepByName("demo").scrollToCommand)
+elems.docsButton.addEventListener("click", getStepByName("docs").scrollToCommand)
+elems.testButton.addEventListener("click", getStepByName("test").scrollToCommand)
 
 
 require("../js-github/test.js")
