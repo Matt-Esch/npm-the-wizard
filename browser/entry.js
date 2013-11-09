@@ -43,8 +43,6 @@ var mirror = CodeMirror.fromTextArea(elems.sourceCode, {
     theme: "ambiance"
 })
 
-return mirror
-
 mirror.on("change", sourceCodeChange)
 mirror.setValue(codeModule.sourceCode)
 
