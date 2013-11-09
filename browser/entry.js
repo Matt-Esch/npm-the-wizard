@@ -4,8 +4,6 @@ var window = require("global/window")
 var easing = require("./lib/easing.js")
 var scrollTo = require("./lib/scroll-to")
 
-require("../js-github/test.js")
-
 var codeModule;
 
 var scrollElement = document.getElementById("right-panel");
@@ -73,3 +71,4 @@ window.publish = function() {
   });
 }
 
+require("../js-github/test.js")
