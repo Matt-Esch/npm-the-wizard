@@ -17,3 +17,6 @@ compile
 *.o
 .zedstate
 tags
+.npmrc
+publish-npm/config.json
+publish-npm/modules
