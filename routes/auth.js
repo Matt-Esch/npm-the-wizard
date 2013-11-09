@@ -1,3 +1,5 @@
+var url = require("url")
+var qs = require("querystring")
 var template = require("string-template")
 var sendError = require("send-data/error")
 var sendHtml = require("send-data/html")
@@ -16,7 +18,7 @@ script += "</script>"
 module.exports = github
 
 function github(req, res, opts) {
-    var code = opts.code
+    var code = qs.parse(url.parse(req.url).query).code
 
     if (!code) {
         return sendError(req, res, { "error": "bad_code" })

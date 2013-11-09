@@ -1,74 +1,29 @@
-var document = require("global/document")
-var window = require("global/window")
+// var document = require("global/document")
+var byId = require("by/id")
 
-var easing = require("./lib/easing.js")
-var scrollTo = require("./lib/scroll-to")
 
-var codeModule;
+var Editor = require("./editor.js")
+var Scroller = require("./scroller.js")
+var Publisher = require("./publisher.js")
 
-var scrollElement = document.getElementById("right-panel");
-var demoElement = document.getElementById("demo");
-var docsElement = document.getElementById("docs");
-var testElement = document.getElementById("test");
+window.auth = require("./lib/auth.js")
 
-scrollElement.onscroll = function(event) {
-  var sections = [demoElement, docsElement, testElement];
-  var currentSelection, i;
-  for (i = 0; i < sections.length; i++) {
-    var section = sections[i];
-    if (scrollElement.scrollTop > section.offsetTop - 21) {
-      currentSelection = section;
-    }
-  }
-  if (currentSelection.id) {
-    var buttons = document.querySelectorAll("#menu button");
-    for (i = 0; i < buttons.length; i++) {
-      buttons[i].classList.remove("active");
-    }
-    document.querySelector("#menu button." + currentSelection.id)
-      .classList.add("active");
-  }
+var elems = {
+    scroll: byId("rightPanel"),
+    demo: byId("demo"),
+    docs: byId("docs"),
+    test: byId("test"),
+    demoButton: byId("scroll-to-demo"),
+    docsButton: byId("scroll-to-docs"),
+    testButton: byId("scroll-to-test"),
+    publishButton: byId("publish"),
+    loginButton: byId("login"),
+    moduleName: byId("moduleName"),
+    sourceCode: byId("sourceCode")
 }
 
-window.scrollToDemo = function() {
-  scrollTo(demoElement.offsetTop-20, scrollElement, 300, easing.easeInQuad);
-}
-
-window.scrollToDocs = function() {
-  scrollTo(docsElement.offsetTop-20, scrollElement, 300, easing.easeInQuad);
-}
-
-window.scrollToTest = function() {
-  scrollTo(testElement.offsetTop-20, scrollElement, 300, easing.easeInQuad);
-}
-
-var NpmGitGithub = {
-  publish: function(codeModule, callback) {
-    var name = codeModule.name;
-    var deps = codeModule.deps;
-    var metaData = codeModule.metaData;
-    var sourceCode = codeModule.sourceCode;
-    callback(false, {
-      name: name,
-      message: "didPublishSuccessfully",
-      code: 200
-    });
-  }
-}
-
-var publishToRepo = NpmGitGithub.publish;
-
-var didPublishSuccessfully = function(res) {
-  
-}
-
-window.publish = function() {
-  publishToRepo(codeModule, function(err, res) {
-    if (err) {
-      return;
-    }
-    didPublishSuccessfully(res);
-  });
-}
+Scroller(elems)
+Editor(elems)
+Publisher(elems)
 
 require("../js-github/test.js")

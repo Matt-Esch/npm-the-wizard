@@ -27,7 +27,10 @@
     "global": "~2.0.7",
     "domlog": "0.0.9",
     "xhr": "~1.2.3",
-    "string-template": "~0.1.1"
+    "string-template": "~0.1.1",
+    "after": "~0.8.1",
+    "xtend": "~2.1.1",
+    "by": "~0.2.3"
   },
   "engines": {
     "node": "0.10.x"
