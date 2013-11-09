@@ -77,8 +77,20 @@
   }
   
   #menu button {
+    font-size: 16px;
     padding: 3px;
+    border: 1px solid #ddd;
+    background-color: white;
   }
+  
+  #menu button.active {
+    background-color: hsla(240, 70%, 90%, 1.0);
+  }
+  
+  #menu button:focus {
+    outline: none;
+  }
+  
 
 </style>
 </head>
@@ -113,13 +125,14 @@
   </div>
   
   <div id="menu">
-    <button onclick="scrollToDemo()">Demo</button>
-    <button onclick="scrollToDocs()">Docs</button>
-    <button onclick="scrollToTest()">Test</button>
+    <button class="demo active" onclick="scrollToDemo()">Demo</button>
+    <button class="docs" onclick="scrollToDocs()">Docs</button>
+    <button class="test" onclick="scrollToTest()">Test</button>
   </div>
   
   <script type="text/javascript" charset="utf-8">
 
+    // from Paul Irish at some point...
     window.requestAnimationFrame = (function(callback) {
       return window.requestAnimationFrame || 
       window.webkitRequestAnimationFrame || 
@@ -207,16 +220,40 @@
       easeInOutQuint: function (t) { return t<.5 ? 16*t*t*t*t*t : 1+16*(--t)*t*t*t*t }
     }
 
+    var scrollElement = document.getElementById("right-panel");
+    var demoElement = document.getElementById("demo");
+    var docsElement = document.getElementById("docs");
+    var testElement = document.getElementById("test");
+    
+    scrollElement.onscroll = function(event) {
+      var sections = [demoElement, docsElement, testElement];
+      var currentSelection;
+      for (var i = 0; i < sections.length; i++) {
+        var section = sections[i];
+        if (scrollElement.scrollTop > section.offsetTop - 21) {
+          currentSelection = section;
+        }
+      }
+      if (currentSelection.id) {
+        var buttons = document.querySelectorAll("#menu button");
+        var button;
+        for (var i = 0; i < buttons.length; i++) {
+          buttons[i].classList.remove("active");
+        }
+        document.querySelector("#menu button." + currentSelection.id).classList.add("active");
+      }
+    }
+
     var scrollToDemo = function() {
-      scrollTo(document.getElementById("demo").offsetTop-20, document.getElementById("right-panel"), 300, easing.easeInQuad);
+      scrollTo(demoElement.offsetTop-20, scrollElement, 300, easing.easeInQuad);
     }
 
     var scrollToDocs = function() {
-      scrollTo(document.getElementById("docs").offsetTop-20, document.getElementById("right-panel"), 300, easing.easeInQuad);
+      scrollTo(docsElement.offsetTop-20, scrollElement, 300, easing.easeInQuad);
     }
 
     var scrollToTest = function() {
-      scrollTo(document.getElementById("test").offsetTop-20, document.getElementById("right-panel"), 300, easing.easeInQuad);
+      scrollTo(testElement.offsetTop-20, scrollElement, 300, easing.easeInQuad);
     }
 
   </script>
