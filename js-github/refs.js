@@ -15,7 +15,46 @@ module.exports = function (repo) {
 
 function resolve(hash, callback) {
   if (!callback) return resolve.bind(this, hash);
-  throw "TODO: Implement repo.resolve";
+  hash = hash.trim();
+  var repo = this;
+  if (isHash(hash)) return callback(null, hash);
+  if (hash === "HEAD") return repo.getHead(onBranch);
+  if ((/^refs\//).test(hash)) {
+    return db.get(hash, checkBranch);
+  }
+  return checkBranch();
+
+  function onBranch(err, ref) {
+    if (err) return callback(err);
+    if (!ref) return callback();
+    return repo.resolve(ref, callback);
+  }
+
+  function checkBranch(err, hash) {
+    if (err && err.code !== "ENOENT") return callback(err);
+    if (hash) {
+      return repo.resolve(hash, callback);
+    }
+    return db.get("refs/heads/" + hash, checkTag);
+  }
+
+  function checkTag(err, hash) {
+    if (err && err.code !== "ENOENT") return callback(err);
+    if (hash) {
+      return repo.resolve(hash, callback);
+    }
+    return db.get("refs/tags/" + hash, final);
+  }
+
+  function final(err, hash) {
+    if (err) return callback(err);
+    if (hash) {
+      return repo.resolve(hash, callback);
+    }
+    err = new Error("ENOENT: Cannot find " + hash);
+    err.code = "ENOENT";
+    return callback(err);
+  }
 }
 
 function updateHead(hash, callback) {
@@ -25,7 +64,10 @@ function updateHead(hash, callback) {
 
 function getHead(callback) {
   if (!callback) return getHead.bind(this);
-  throw "TODO: Implement repo.getHead";
+  this.apiGet("/repos/:root/git/refs/heads/master", function (err, result) {
+    if (err) return callback(err);
+    callback(null, result.object.sha);
+  });
 }
 
 function setHead(branchName, callback) {
@@ -52,3 +94,4 @@ function listRefs(prefix, callback) {
   if (!callback) return listRefs.bind(this, prefix);
   throw "TODO: Implement repo.listRefs";
 }
+
