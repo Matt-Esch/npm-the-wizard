@@ -1,9 +1,10 @@
+var bops = require('bops');
+
 module.exports = {
   commit: decodeCommit,
   tag: decodeTag,
   tree: decodeTree,
-  blob: decodeBlob,
-  text: decodeText
+  blob: decodeBlob
 };
 
 function decodeCommit(result) {
@@ -17,7 +18,13 @@ function decodeCommit(result) {
 }
 
 function decodeTag(result) {
-  throw "TODO: decodeTag";
+  return {
+    object: result.object.sha,
+    type: result.object.type,
+    tag: result.tag,
+    tagger: pickPerson(result.tagger),
+    message: result.message
+  };
 }
 
 function decodeTree(result) {
@@ -33,13 +40,13 @@ function decodeTree(result) {
 }
 
 function decodeBlob(result) {
-  console.log("onBlob", result)
-  throw "TODO: decodeBlob";
-}
-
-function decodeText(result) {
-  console.log("onText", result)
-  throw "TODO: decodeBlob";
+  if (result.encoding === 'base64') {
+    return bops.from(result.content.replace(/\n/g, ''), 'base64');
+  }
+  if (result.encoding === 'utf-8') {
+    return bops.from(result.content, 'utf8');
+  }
+  throw new Error("Unknown blob encoding: " + result.encoding);
 }
 
 function pickPerson(person) {
