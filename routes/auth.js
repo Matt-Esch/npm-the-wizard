@@ -1,6 +1,7 @@
 var sendError = require("send-data/error")
 var sendJson = require("send-data/json")
-var auth = require("./lib/github-auth.js")(require("./config/github-auth.json"))
+var config = require("../config/github-auth.json")
+var auth = require("../lib/github-auth.js")(config)
 
 module.exports = github
 
