@@ -53,8 +53,7 @@ guideSteps = [
     onSet: function() {
       var githubUsername = "williamcotton";
       elems.loginButton.innerHTML = githubUsername;
-
-      //elems.loginButton.offsetWidth;
+      elems.loginButton.offsetWidth;
       elems.guide.classList.remove("login");
       elems.guide.classList.add("settled");
       guide.style.marginLeft = "0px";
