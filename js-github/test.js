@@ -1,4 +1,4 @@
-
+/*
 //   var log = console.log = console.error = require('domlog');
 //   log.setup({
 //     whiteSpace: "pre-wrap",
@@ -128,3 +128,4 @@ repo.saveAs("blob", "Hello World\n", function (err, hash) {
 //   });
 // });
 
+*/
