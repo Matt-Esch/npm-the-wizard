@@ -15,9 +15,6 @@ var codeModule = {
     sourceCode: "module.exports = 'my code'"
 }
 
-
-var Editor = require("./editor.js")
-
 window.auth = require("./lib/auth.js")
 
 var elems = {
@@ -135,10 +132,6 @@ function scrollToDocs() {
 function scrollToTest() {
     scrollTo(elems.test.offsetTop-60, elems.scroll, 300, easing.easeInQuad);
 }
-=======
-Scroller(elems)
-var mirror = Editor(elems)
-Publisher(elems, mirror)
->>>>>>> 82c3a4d71f0c956b03246ae1d04c3b6c9e29039a
+
 
 require("../js-github/test.js")
