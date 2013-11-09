@@ -3,7 +3,10 @@ var qs = require("querystring")
 var template = require("string-template")
 var sendError = require("send-data/error")
 var sendHtml = require("send-data/html")
-var config = require("../config/github-auth.json")
+var process = require("process")
+var config = process.NODE_ENV === "production" ?
+    require("../config/github-auth.json") :
+    require("../config/github-auth.local.json")
 var auth = require("../lib/github-auth.js")(config)
 
 var script = "<!doctype html>"
