@@ -5,10 +5,30 @@ var fs = require("fs")
 var process = require("process")
 var router = require("./router.js")
 
+
+function corsHeaders(req, res) {
+  var host;
+  if (req.headers.referer) {
+    var parsed_url = url.parse(req.headers.referer);
+    host = parsed_url.protocol + "//" + parsed_url.host;
+  }
+  else {
+    host = "*";
+  }
+  res.setHeader('Access-Control-Allow-Origin', host);
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+}
+
 var isProduction = process.env.NODE_ENV === "production"
 var port = isProduction ? 80 : 8000
 
-var server = http.createServer(router)
+var server = http.createServer(function (req, res) {
+  corsHeaders(req, res)
+  router(req, res)
+})
+
 server.listen(port, function (err) {
     if (err) {
         console.error(err)
@@ -20,7 +40,6 @@ server.listen(port, function (err) {
             if (err) {
                 return console.error(err)
             }
-
             process.setuid(stat.uid)
         })
     }
