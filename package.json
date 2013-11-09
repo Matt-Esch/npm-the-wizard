@@ -11,7 +11,10 @@
     "url": "git@github.com:nko4/team-mad-science.git"
   },
   "dependencies": {
-    "nko": "*"
+    "nko": "*",
+    "process": "~0.5.1",
+    "routes-router": "~1.0.3",
+    "serve-browserify": "~0.3.3"
   },
   "engines": {
     "node": "0.10.x"

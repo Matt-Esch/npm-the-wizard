@@ -1,26 +1,29 @@
-// https://github.com/nko4/website/blob/master/module/README.md#nodejs-knockout-deploy-check-ins
-require('nko')('4spqyBaFzk4ZQI-y');
+require("nko")("4spqyBaFzk4ZQI-y")
 
-var isProduction = (process.env.NODE_ENV === 'production');
-var http = require('http');
-var port = (isProduction ? 80 : 8000);
+var http = require("http")
+var fs = require("fs")
+var process = require("process")
+var router = require("./router.js")
 
-http.createServer(function (req, res) {
-  // http://blog.nodeknockout.com/post/35364532732/protip-add-the-vote-ko-badge-to-your-app
-  var voteko = '<iframe src="http://nodeknockout.com/iframe/team-mad-science" frameborder=0 scrolling=no allowtransparency=true width=115 height=25></iframe>';
+var isProduction = process.env.NODE_ENV === "production"
+var port = isProduction ? 80 : 8000
 
-  res.writeHead(200, {'Content-Type': 'text/html'});
-  res.end('<html><body>' + voteko + '</body></html>\n');
-}).listen(port, function(err) {
-  if (err) { console.error(err); process.exit(-1); }
+var server = http.createServer(router)
+server.listen(port, function (err) {
+    if (err) {
+        console.error(err)
+        process.exit(-1)
+    }
 
-  // if run as root, downgrade to the owner of this file
-  if (process.getuid() === 0) {
-    require('fs').stat(__filename, function(err, stats) {
-      if (err) { return console.error(err); }
-      process.setuid(stats.uid);
-    });
-  }
+    if (process.getuid() === 0) {
+        fs.stat(__filename, function (err, stat) {
+            if (err) {
+                return console.error(err)
+            }
 
-  console.log('Server running at http://0.0.0.0:' + port + '/');
-});
+            process.setuid(stat.uid)
+        })
+    }
+
+    console.log("Server running at http://localhost:" + port + "/")
+})
