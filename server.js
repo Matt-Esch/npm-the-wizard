@@ -3,6 +3,7 @@ require('nko')('4spqyBaFzk4ZQI-y');
 
 var isProduction = (process.env.NODE_ENV === 'production');
 var http = require('http');
+var url = require('url');
 var port = (isProduction ? 80 : 8000);
 
 function corsHeaders(req, res) {
@@ -24,7 +25,7 @@ http.createServer(function (req, res) {
   // http://blog.nodeknockout.com/post/35364532732/protip-add-the-vote-ko-badge-to-your-app
   var voteko = '<iframe src="http://nodeknockout.com/iframe/team-mad-science" frameborder=0 scrolling=no allowtransparency=true width=115 height=25></iframe>';
 
-  console.log(req.headers);
+  corsHeaders(req, res);
 
   res.writeHead(200, {'Content-Type': 'text/html'});
   res.end('<html><body>' + voteko + '</body></html>\n');
