@@ -74,5 +74,6 @@ function githubPublish(module, callback) {
 
 // implement real thing
 function getGithubUser(callback) {
-    callback(null, JSON.parse(localStorage.getItem("github_details")))
+    callback(null, { name: "Raynos", email: "raynos2@gmail.com" })
+    // callback(null, JSON.parse(localStorage.getItem("github_details")))
 }
