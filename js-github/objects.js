@@ -54,6 +54,7 @@ function loadAs(type, hash, callback) {
 
   function onValue(err, result) {
     if (err) return callback(err);
+    repo.typeCache[result.sha] = type;
     var body;
     try {
       body = decoders[type].call(repo, result);
