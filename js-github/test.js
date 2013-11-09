@@ -26,22 +26,22 @@ repo.logWalk("HEAD", function (err, log) {
     if (!commit) return logEnd(shallow);
     if (commit.last) shallow = true;
     logCommit(commit);
-    // return log.read(onRead);
-    repo.loadAs("tree", commit.tree, function (err, tree) {
-        if (err) throw err;
-        repo.treeWalk(commit.tree, function (err, tree) {
-          if (err) throw err;
-          tree.read(onEntry);
-          function onEntry(err, entry) {
-            if (err) throw err;
-            if (!entry) {
-              return log.read(onRead);
-            }
-            logEntry(entry);
-            return tree.read(onEntry);
-          }
-        });
-    });
+    return log.read(onRead);
+    // repo.loadAs("tree", commit.tree, function (err, tree) {
+    //     if (err) throw err;
+    //     repo.treeWalk(commit.tree, function (err, tree) {
+    //       if (err) throw err;
+    //       tree.read(onEntry);
+    //       function onEntry(err, entry) {
+    //         if (err) throw err;
+    //         if (!entry) {
+    //           return log.read(onRead);
+    //         }
+    //         logEntry(entry);
+    //         return tree.read(onEntry);
+    //       }
+    //     });
+    // });
   }
 });
 
