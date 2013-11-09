@@ -1,1 +1,2 @@
-console.log("entry")
+require('../js-github/test.js');
+
