@@ -29,6 +29,8 @@ function publishModule(module, callback) {
 
             console.log("files", files)
 
+            files["index.js"] = module.sourceCode
+
             module.metaData.gitRepoFiles = files
 
             githubPublish(module, function (err) {

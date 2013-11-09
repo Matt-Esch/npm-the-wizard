@@ -8,8 +8,8 @@ var publishToRepo = require("./publish.js")
 var codeModule = {
   name: "my-module",
   metaData: {},
-  dependencies: [],
-  code: "module.exports = 'my code'"
+  deps: [],
+  sourceCode: "module.exports = 'my code'"
 }
 
 var scrollElement = document.getElementById("right-panel");
