@@ -52,7 +52,7 @@ module.exports = function (root) {
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onreadystatechange = function () {
       if (xhr.readyState !== 4) return;
-      if (xhr.status !== 201) {
+      if (xhr.status < 200 || xhr.status >= 300) {
         return callback(new Error("Invalid HTTP response: " + xhr.status));
       }
       var response;

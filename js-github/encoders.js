@@ -18,12 +18,12 @@ module.exports = {
 function encodeCommit(commit) {
   var out = {};
   out.message = commit.message;
-  if (commit.author) out.author = encodePerson(commit.author);
-  if (commit.committer) out.committer = encodePerson(commit.committer);
+  out.tree = commit.tree;
   if (commit.parents) out.parents = commit.parents;
   else if (commit.parent) out.parents = [commit.parent];
   else commit.parents = [];
-  out.tree = commit.tree;
+  if (commit.author) out.author = encodePerson(commit.author);
+  if (commit.committer) out.committer = encodePerson(commit.committer);
   return out;
 }
 

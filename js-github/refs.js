@@ -19,41 +19,12 @@ function resolve(hash, callback) {
   var repo = this;
   if (isHash(hash)) return callback(null, hash);
   if (hash === "HEAD") return repo.getHead(onBranch);
-  if ((/^refs\//).test(hash)) {
-    return db.get(hash, checkBranch);
-  }
-  return checkBranch();
+  throw "TODO: Implement more";
 
   function onBranch(err, ref) {
     if (err) return callback(err);
     if (!ref) return callback();
     return repo.resolve(ref, callback);
-  }
-
-  function checkBranch(err, hash) {
-    if (err && err.code !== "ENOENT") return callback(err);
-    if (hash) {
-      return repo.resolve(hash, callback);
-    }
-    return db.get("refs/heads/" + hash, checkTag);
-  }
-
-  function checkTag(err, hash) {
-    if (err && err.code !== "ENOENT") return callback(err);
-    if (hash) {
-      return repo.resolve(hash, callback);
-    }
-    return db.get("refs/tags/" + hash, final);
-  }
-
-  function final(err, hash) {
-    if (err) return callback(err);
-    if (hash) {
-      return repo.resolve(hash, callback);
-    }
-    err = new Error("ENOENT: Cannot find " + hash);
-    err.code = "ENOENT";
-    return callback(err);
   }
 }
 
@@ -77,7 +48,7 @@ function setHead(branchName, callback) {
 
 function readRef(ref, callback) {
   if (!callback) return readRef.bind(this, ref);
-  if (!(/^ref\//).test(ref)) {
+  if (!(/^refs\//).test(ref)) {
     return callback(new Error("Invalid ref: " + ref));
   }
   return this.apiGet("/repos/:root/git/" + ref, onRef);
@@ -90,11 +61,12 @@ function readRef(ref, callback) {
 
 function writeRef(ref, hash, callback) {
   if (!callback) return writeRef(this, ref, hash);
-  if (!(/^ref\//).test(ref)) {
+  if (!(/^refs\//).test(ref)) {
     return callback(new Error("Invalid ref: " + ref));
   }
-  this.apiPost("/repos/:root/git/ref", {
-    sha: hash
+  this.apiPost("/repos/:root/git/" + ref, {
+    sha: hash,
+    force: true
   }, function (err) {
     if (err) return callback(err);
     callback();
