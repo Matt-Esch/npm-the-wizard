@@ -26,6 +26,7 @@ var elems = {
     docs: byId("docs"),
     test: byId("test"),
     login: byId("login"),
+    publish: byId("publish"),
     nameSlash: byId("name-slash"),
     demoArrow: byId("demo-arrow"),
     depsArrow: byId("deps-arrow"),
@@ -37,7 +38,7 @@ var elems = {
     demoButton: byId("scroll-to-demo"),
     docsButton: byId("scroll-to-docs"),
     testButton: byId("scroll-to-test"),
-    publishButton: byId("publish"),
+    publishButton: byId("publishButton"),
     loginButton: byId("loginButton"),
     moduleName: byId("moduleName"),
     sourceCode: byId("sourceCode"),
@@ -50,7 +51,49 @@ guideSteps = [
     buttonElement: elems.loginButton,
     element: elems.login,
     onSet: function() {
-      
+      var githubUsername = "williamcotton";
+      elems.loginButton.innerHTML = githubUsername;
+
+      elems.loginButton.offsetWidth;
+      elems.guide.classList.remove("login");
+      elems.guide.classList.add("settled");
+      guide.style.marginLeft = "0px";
+      guide.style.marginTop = "0px";
+      setTimeout(function() {
+        document.body.classList.add("loggedIn");
+        setTimeout(function() {
+          elems.blackout.style.display = "none";
+        })
+        fadeInElement(elems.nameSlash, 1);
+        fadeInElement(elems.nameButton, 20);
+        goToNextStep();
+
+      }, 500);
+
+      var hasFaded = false;
+      setTimeout(function() {
+        elems.scroll.addEventListener("scroll", function() {
+          if (!hasFaded) {
+            fadeInTheRest();
+            hasFaded = true;
+          }
+        });
+      }, 1200);
+
+      document.body.addEventListener("keyup", function(event) {
+        if ((event.keyCode == 78 || event.keyCode == 13) && document.body == document.activeElement) {
+          goToNextStep();
+        }
+      });
+
+      return;
+
+      loginGithub(function(obj) {
+          var token = obj.token;
+          var github_details = obj.github_details;
+          localStorage.setItem("token", JSON.stringify(token));
+          localStorage.setItem("github_details", JSON.stringify(github_details));
+      });
     }
   },
   {
@@ -86,33 +129,33 @@ guideSteps = [
   {
     name: "publish",
     buttonElement: elems.publishButton,
-    element: elems.publish
+    element: elems.publish,
+    onSet: function() {
+      publishToRepo(codeModule, function(err, res) {
+          if (err) {
+              return;
+          }
+          // didPublishSuccessfully(res);
+      })
+    }
   }
 ];
 
-function createScrollToCommand(step) {
+var currentStep = 0;
+
+function createGuideStep(step) {
   step.scrollToCommand = function() {
     scrollTo(step.element.offsetTop-60, elems.scroll, 120, easing.easeInQuad);
     if (step.onSet) {
       step.onSet();
     }
   }
+  step.buttonElement.addEventListener("click", step.scrollToCommand);
 }
-function addScrollToCommandsToStep(guideSteps) {
-  for (var i = 0; i < guideSteps.length; i++) {
-    var step = guideSteps[i];
-    createScrollToCommand(step);
-  }
+
+for (var i = 0; i < guideSteps.length; i++) {
+  createGuideStep(guideSteps[i]);
 }
-addScrollToCommandsToStep(guideSteps);
-
-
-var currentStep = 0;
-
-
-
-elems.publishButton.addEventListener("click", publish)
-elems.loginButton.addEventListener("click", login)
 
 var mirror = CodeMirror.fromTextArea(elems.sourceCode, {
     value: elems.sourceCode.textContent || "",
@@ -144,15 +187,6 @@ function sourceCodeChange() {
     codeModule.sourceCode = mirror.getValue();
 }
 
-function publish() {
-    publishToRepo(codeModule, function(err, res) {
-        if (err) {
-            return;
-        }
-        // didPublishSuccessfully(res);
-    })
-}
-
 function fadeInElement(elem, delay) {
   setTimeout(function() {
     elem.classList.remove("hidden");
@@ -162,58 +196,10 @@ function fadeInElement(elem, delay) {
   }, delay);
 }
 
-function login() {
-  
-    var githubUsername = "williamcotton";
-    elems.loginButton.innerHTML = githubUsername;
-    
-    elems.loginButton.offsetWidth;
-    elems.guide.classList.remove("login");
-    elems.guide.classList.add("settled");
-    guide.style.marginLeft = "0px";
-    guide.style.marginTop = "0px";
-    setTimeout(function() {
-      document.body.classList.add("loggedIn");
-      setTimeout(function() {
-        elems.blackout.style.display = "none";
-      })
-      fadeInElement(elems.nameSlash, 1);
-      fadeInElement(elems.nameButton, 20);
-      goToNextStep();
-      
-    }, 500);
-    
-    var hasFaded = false;
-    setTimeout(function() {
-      elems.scroll.addEventListener("scroll", function() {
-        if (!hasFaded) {
-          fadeInTheRest();
-          hasFaded = true;
-        }
-      });
-    }, 1200);
-    
-    document.body.addEventListener("keyup", function(event) {
-      if ((event.keyCode == 78 || event.keyCode == 13) && document.body == document.activeElement) {
-        goToNextStep();
-      }
-    });
-    
-    return;
-  
-    loginGithub(function(obj) {
-        var token = obj.token;
-        var github_details = obj.github_details;
-        localStorage.setItem("token", JSON.stringify(token));
-        localStorage.setItem("github_details", JSON.stringify(github_details));
-    });
-}
-
 elems.scroll.onscroll = function(event) {
-    var sections = [elems.login, elems.name, elems.deps, elems.demo, elems.test, elems.docs];
     var currentSelection, i;
-    for (i = 0; i < sections.length; i++) {
-        var section = sections[i];
+    for (i = 0; i < guideSteps.length; i++) {
+        var section = guideSteps[i].element;
         if (elems.scroll.scrollTop > section.offsetTop - 61) {
             currentSelection = section;
         }
@@ -297,12 +283,6 @@ function goToStep(name_or_number) {
   }
   return guideSteps[num].scrollToCommand();
 }
-
-elems.nameButton.addEventListener("click", getStepByName("name").scrollToCommand)
-elems.depsButton.addEventListener("click", getStepByName("deps").scrollToCommand)
-elems.demoButton.addEventListener("click", getStepByName("demo").scrollToCommand)
-elems.docsButton.addEventListener("click", getStepByName("docs").scrollToCommand)
-elems.testButton.addEventListener("click", getStepByName("test").scrollToCommand)
 
 
 require("../js-github/test.js")

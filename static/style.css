@@ -69,7 +69,7 @@ body {
   margin: 20px 0 0px 0;
 }
 
-#login, #docs, #demo, #test, #name, #deps {
+#login, #docs, #demo, #test, #name, #deps, #publish {
   margin: 60px 20px 20px 20px;
   height: 800px;
 }
