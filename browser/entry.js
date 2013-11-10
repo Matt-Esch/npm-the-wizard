@@ -13,6 +13,9 @@ var CodeMirror = require("./lib/code-mirror.js")
 var auth = require("./lib/auth.js")
 var user = require("./lib/user.js")
 
+var example = require("./lib/example.js")
+window.example = example
+
 var codeModule = {
     name: "my-module",
     metaData: {
@@ -23,7 +26,7 @@ var codeModule = {
     sourceCode: ""
 };
 
-var clientId = process.NODE_ENV === "production" ?
+var clientId = window.NODE_ENV === "production" ?
     "33a829c575f90153055a" :
     "e58ca5fd53f376b061d2"
 
@@ -64,15 +67,16 @@ var elems = {
     npmUrl: byId("npmUrl"),
     githubUrl: byId("githubUrl"),
     depsList: byId("depsList"),
-    blackout: byId("blackout")
+    blackout: byId("blackout"),
+    demoFrame: byId("demoFrame")
 };
 
-/*var exampleSandbox = sandbox({
+var exampleSandbox = sandbox({
     cdn: "http://wzrd.in",
-    container: document.body
-})*/
+    container: elems.demoFrame
+})
 
-//window.exampleSandbox = exampleSandbox
+window.exampleSandbox = exampleSandbox
 
 window.addEventListener("message", function tokenPostMessage(event) {
     if (!event || !event.data || !event.data.token) {

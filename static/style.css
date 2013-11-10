@@ -101,7 +101,7 @@ input#description {
   height: 500px;
 }
 
-#demo iframe, #test iframe {
+.iframe-container {
   height: 200px;
   width: 100%;
   border: none;
