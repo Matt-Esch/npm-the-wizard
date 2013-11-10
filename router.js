@@ -20,19 +20,26 @@ router.addRoute("/auth", auth)
 
 var mount = st({
     path: path.join(__dirname, "static"),
-    cache: false,
+    cache: isProduction,
     url: "/static"
 })
 
 router.addRoute("/static/*", mount)
 
-router.addRoute("/entry.js", function (req, res) {
-    ServeBrowserify({
-        root: path.join(__dirname, "browser"),
-        gzip: true,
-        cache: isProduction
-    })(req, res)
-})
+if (!isProduction) {
+    router.addRoute("/entry.js", function (req, res) {
+        ServeBrowserify({
+            root: path.join(__dirname, "browser"),
+            gzip: true,
+            cache: isProduction
+        })(req, res)
+    })
+} else {
+    router.addRoute("/entry.js", function (req, res) {
+        req.url = "/static/index.js"
+        mount(req, res)
+    })
+}
 
 router.addRoute("/publish", require("./routes/publish.js"))
 
