@@ -394,8 +394,8 @@ function submitName() {
   codeModule.name = name;
   if (codeModule.sourceCode === "") {
     var projectName = camelCase(name)
-    codeModule.sourceCode = "module.exports = " + name + "\n\n" +
-      "function " + name + "() {\n\n}\n"
+    codeModule.sourceCode = "module.exports = " + projectName + "\n\n" +
+      "function " + projectName + "() {\n\n}\n"
     sourceCodeEditor.setValue(codeModule.sourceCode);
   }
 }
