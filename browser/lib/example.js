@@ -15,15 +15,14 @@ function example(sandbox, opts) {
     var moduleCode = opts.moduleCode
     var moduleName = opts.moduleName
     var injectSource =  new RegExp("require(\\s)*\\((\\s)*((\"" +
-        moduleName +
+        "((" + moduleName +")|(\\.\\./index.js))" +
         "\")|('" +
-        moduleName +
+        "((" + moduleName +")|(\\.\\./index.js))" +
         "'))(\\s)*\\)")
 
     var injectedModule = template(sourceTemplate, moduleCode)
     var sourceCode = opts.sourceCode.replace(injectSource, injectedModule)
 
-    console.log(sourceCode)
     sandbox.bundle(sourceCode)
 }
 
