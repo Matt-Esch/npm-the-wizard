@@ -27,7 +27,7 @@ function publishModule(module, callback) {
                 return callback(err)
             }
 
-            console.log("files", files)
+            // console.log("files", files)
 
             files["index.js"] = module.sourceCode
 
@@ -38,8 +38,8 @@ function publishModule(module, callback) {
                     return callback(err)
                 }
 
-                // npmPublish(module, callback)
-                callback(null, { code: 200, message: "ok" })
+                npmPublish(module, callback)
+                // callback(null, { code: 200, message: "ok" })
             })
         })
     })
