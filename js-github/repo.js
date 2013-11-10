@@ -5,10 +5,10 @@ module.exports = function (root, accessToken) {
     apiPost: apiPost
   };
 
-  if (!accessToken) {
-    accessToken = prompt("Entrt github token");
-    if (!accessToken) return;
-  }
+  // if (!accessToken) {
+  //   accessToken = prompt("Entrt github token");
+  //   if (!accessToken) return;
+  // }
 
   require('./objects.js')(repo);
 

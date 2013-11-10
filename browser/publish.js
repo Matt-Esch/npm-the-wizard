@@ -18,9 +18,9 @@ function publishModule(module, callback) {
             return callback(err)
         }
 
-        module.metaData.githubUserName = user.name
+        module.metaData.githubUserName = user.login
         module.metaData.githubEmail = user.email
-        module.metaData.githubFragment = user.name + "/" + module.name
+        module.metaData.githubFragment = user.login + "/" + module.name
 
         createFiles(module, function (err, files) {
             if (err) {

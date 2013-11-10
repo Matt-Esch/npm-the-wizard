@@ -10,7 +10,8 @@ var githubRepo = require('./repo.js');
 module.exports = function (module, callback) {
   console.log("module", module);
   var meta = module.metaData;
-  var accessToken = meta.githubAccessToken;
+  //console.log(meta);
+  var accessToken = localStorage.getItem("token");
   var root = meta.githubFragment;
   var user = { name: meta.githubUserName, email: meta.githubEmail };
   var files = meta.gitRepoFiles;
