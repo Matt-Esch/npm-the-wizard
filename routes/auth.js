@@ -9,6 +9,8 @@ var config = process.NODE_ENV === "production" ?
     require("../config/github-auth.local.json")
 var auth = require("../lib/github-auth.js")(config)
 
+console.log("gh auth config", config)
+
 var script = "<!doctype html>"
 script += "<meta-charset='utf-8'>"
 script += "<title>User Auth</title>"
