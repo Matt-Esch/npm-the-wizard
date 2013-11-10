@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "watch": "nodemon -w ./server.js -w ./router.js server.js"
+    "watch": "nodemon -w ./server.js -w ./router.js server.js",
+    "postinstall": "npm i browserify; browserify ./browser/entry.js > ./static/index.js"
   },
   "repository": {
     "type": "git",
