@@ -507,7 +507,6 @@ function submitName() {
   var name = elems.moduleName.value;
   elems.nameButton.innerHTML = name;
   fadeInTheRest();
-  codeModule.name = name;
   if (codeModule.sourceCode === "") {
     var projectName = camelCase(name)
     codeModule.sourceCode = "\nmodule.exports = " + projectName + "\n\n" +
@@ -528,18 +527,21 @@ function submitNpmUserName() {
 }
 
 elems.moduleName.addEventListener("keyup", function(event) {
+  codeModule.name = elems.moduleName.value;
   if (event.keyCode === 13) {
     submitName();
   }
 });
 
 elems.description.addEventListener("keyup", function(event) {
+  codeModule.metaData.description = elems.description.value;
   if (event.keyCode === 13) {
     submitDescription();
   }
 });
 
 elems.npmUserName.addEventListener("keyup", function(event) {
+  codeModule.metaData.npmUserName = elems.npmUserName.value;
   if (event.keyCode === 13) {
     submitNpmUserName();
   }
