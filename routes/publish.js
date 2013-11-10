@@ -5,7 +5,7 @@ var jsonBody = require("body/json")
 var exec = require("child_process").exec
 
 var publishFile = path.join(__dirname, "..", "publish-npm", "spawn.js")
-// var publish = require("../publish-npm")
+var publish = require("../publish-npm")
 
 module.exports = publishRoute
 
@@ -39,19 +39,31 @@ function publishRoute(req, res) {
         body.userName = body.userName.trim()
         body.github = body.github.trim()
         console.log("publishing", body.github, body.userName)
-        exec("node " + publishFile + " " + body.github + " " + body.userName,
-            function (error, stdout, stderr) {
-                if (err) {
-                    return sendError(req, res, err)
-                }
 
-                // console.log("stdout", stdout)
-                // console.log("stderr", stderr)
+        publish(body.github, body.userName, function (err, resp) {
+            if (err) {
+                return sendError(req, res, err)
+            }
 
-                sendJson(req, res, {
-                    code: 200,
-                    message: "ok"
-                })
+            sendJson(req, res, {
+                code: 200,
+                message: "ok"
             })
+        })
+
+        // exec("node " + publishFile + " " + body.github + " " + body.userName,
+        //     function (error, stdout, stderr) {
+        //         if (err) {
+        //             return sendError(req, res, err)
+        //         }
+
+        //         // console.log("stdout", stdout)
+        //         // console.log("stderr", stderr)
+
+        //         sendJson(req, res, {
+        //             code: 200,
+        //             message: "ok"
+        //         })
+        //     })
     })
 }

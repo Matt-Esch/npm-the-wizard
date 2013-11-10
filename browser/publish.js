@@ -60,6 +60,7 @@ function npmPublish(module, callback) {
     xhr({
         uri: "/publish",
         method: "POST",
+        timeout: 20 * 1000,
         json: {
             userName: module.metaData.npmUserName,
             github: module.metaData.githubFragment
@@ -68,6 +69,10 @@ function npmPublish(module, callback) {
         console.log("err", err, res)
         if (err) {
             return callback(err)
+        }
+
+        if (res.body && res.body.errors && res.body.errors[0]) {
+            return callback(res.body.errors[0])
         }
 
         callback(null, res.body)
