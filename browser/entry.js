@@ -12,6 +12,9 @@ var CodeMirror = require("./lib/code-mirror.js")
 var auth = require("./lib/auth.js")
 var user = require("./lib/user.js")
 
+var example = require("./lib/example.js")
+window.example = example
+
 var codeModule = {
     name: "my-module",
     metaData: {},
@@ -58,12 +61,12 @@ var elems = {
     blackout: byId("blackout")
 };
 
-/*var exampleSandbox = sandbox({
+var exampleSandbox = sandbox({
     cdn: "http://wzrd.in",
     container: document.body
-})*/
+})
 
-//window.exampleSandbox = exampleSandbox
+window.exampleSandbox = exampleSandbox
 
 window.addEventListener("message", function tokenPostMessage(event) {
     if (!event || !event.data || !event.data.token) {
