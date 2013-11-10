@@ -38,6 +38,7 @@ function publishModule(module, callback) {
                     return callback(err)
                 }
 
+                console.log("module", module)
                 npmPublish(module, callback)
                 // callback(null, { code: 200, message: "ok" })
             })

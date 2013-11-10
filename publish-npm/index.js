@@ -1,4 +1,4 @@
-var uuid = require("uuid")
+    var uuid = require("uuid")
 var path = require("path")
 
 var checkNamespace = require("./check-namespace.js")
