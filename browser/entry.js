@@ -63,6 +63,9 @@ var elems = {
     depsSearch: byId("depsSearch"),
     rightPanel: byId("rightPanel"),
     leftPanel: byId("leftPanel"),
+    description: byId("description"),
+    npmUrl: byId("npmUrl"),
+    githubUrl: byId("githubUrl"),
     depsList: byId("depsList"),
     blackout: byId("blackout"),
     demoFrame: byId("demoFrame"),
@@ -194,6 +197,7 @@ var guideSteps = [
     element: elems.demo,
     onSet: function() {
       setTimeout(function() {
+        demoSourceEditor.setValue(createDemo(codeModule));
         demoSourceEditor.focus();
       }, 180);
     }
@@ -205,6 +209,7 @@ var guideSteps = [
     element: elems.test,
     onSet: function() {
       setTimeout(function() {
+        testSourceEditor.setValue(createTest(codeModule));
         testSourceEditor.focus();
       }, 180);
     }
@@ -236,14 +241,28 @@ var guideSteps = [
 ];
 
 elems.publishToGitHubAndNpm.addEventListener("click", function() {
+  elems.publishToGitHubAndNpm.innerHTML = "Publishing to GitHub and npm...";
   publishToRepo(codeModule, function(err, res) {
       if (err) {
           return;
       }
-      console.log("res", res);
-      // didPublishSuccessfully(res);
+      //console.log("res", res);
+      didPublishSuccessfully(res);
   });
+  //setTimeout(didPublishSuccessfully, 300);
 });
+
+function didPublishSuccessfully(res) {
+  elems.publishToGitHubAndNpm.innerHTML = "Published to GitHub and npm!";
+  elems.publishToGitHubAndNpm.disabled = true;
+  elems.publishToGitHubAndNpm.classList.add("published");
+  elems.publish.classList.remove('unpublished');
+  elems.publish.classList.add('published');
+  var user = JSON.parse(localStorage.getItem("user"));
+  elems.npmUrl.href = "https://npmjs.org/package/" + codeModule.name;
+  elems.githubUrl.href = "https://github.com/" + user.login + "/" + codeModule.name;
+
+}
 
 var currentStep = 0;
 
@@ -411,31 +430,10 @@ function fadeInTheRest() {
   }
 }
 
-function submitName() {
-  goToNextStep();
-  elems.moduleName.blur();
-  var name = elems.moduleName.value;
-  elems.nameButton.innerHTML = name;
-  fadeInTheRest();
-  codeModule.name = name;
-  if (codeModule.sourceCode === "") {
-    var projectName = camelCase(name)
-    codeModule.sourceCode = "\nmodule.exports = " + projectName + "\n\n" +
-      "function " + projectName + "() {\n\n}\n"
-    sourceCodeEditor.setValue(codeModule.sourceCode);
-  }
-}
-
 function camelCase(str) {
     return str.replace(/[_.-](\w|$)/g, function (_,x) {
         return x.toUpperCase()
     })
-}
-
-
-function submitNpmUserName() {
-  elems.npmUserName.blur();
-  codeModule.metaData.npmUserName = elems.npmUserName.value;
 }
 
 function updateDepsList() {
@@ -509,9 +507,41 @@ function addDepToList(depName) {
   elems.depsSearch.value = "";
 }
 
+function submitName() {
+  goToNextStep();
+  elems.moduleName.blur();
+  var name = elems.moduleName.value;
+  elems.nameButton.innerHTML = name;
+  fadeInTheRest();
+  codeModule.name = name;
+  if (codeModule.sourceCode === "") {
+    var projectName = camelCase(name)
+    codeModule.sourceCode = "\nmodule.exports = " + projectName + "\n\n" +
+      "function " + projectName + "() {\n\n}\n"
+    sourceCodeEditor.setValue(codeModule.sourceCode);
+  }
+}
+
+function submitDescription() {
+  goToNextStep();
+  elems.description.blur();
+  codeModule.metaData.description = elems.description.value;
+}
+
+function submitNpmUserName() {
+  elems.npmUserName.blur();
+  codeModule.metaData.npmUserName = elems.npmUserName.value;
+}
+
 elems.moduleName.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
     submitName();
+  }
+});
+
+elems.description.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    submitDescription();
   }
 });
 

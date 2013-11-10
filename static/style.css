@@ -36,6 +36,10 @@ input {
   font-size: 24px;
 }
 
+input#description {
+  width: 100%;
+}
+
 /*#sourceCode {
   background-color: black;
   font-family: monospace;
@@ -90,7 +94,11 @@ input {
 }
 
 #demo .CodeMirror, #test .CodeMirror {
-  height: 200px;
+  height: 250px;
+}
+
+#docs .CodeMirror{
+  height: 500px;
 }
 
 .iframe-container {
@@ -110,6 +118,25 @@ button {
   padding: 5px;
   background-color: hsla(220, 70%, 90%, 1.0);
   border: 1px solid hsla(220, 70%, 50%, 1.0);
+}
+
+#publish p a {
+  color: black;
+  text-decoration: underline;
+}
+
+#publish .publishSuccess {
+  margin-top: 30px;
+  transition: opacity 120ms;
+}
+
+#publish.unpublished .publishSuccess {
+  
+  opacity: 0.0;
+}
+
+#publish.published .publishSuccess {
+  opacity: 1.0;
 }
 
 #depsList {

@@ -45,9 +45,15 @@
       
       <div id="name">
         <h1>NAME</h1>
-        <input type="text" name="name" id="moduleName" value="">
+        <input type="text" name="name" id="moduleName" value="" placeholder="name">
         <p>
           Your module needs a <strong>name</strong>. This name will be used to create a repository on GitHub as well as name your module for npm.
+        </p>
+        <p>
+          <input type="text" name="description" id="description" value="" placeholder="description">
+        </p>
+        <p>
+          A quick description of your module is a nice addition.
         </p>
       </div>
       
@@ -99,7 +105,7 @@
         </aside>
       </div>
       
-      <div id="publish">
+      <div id="publish" class="unpublished">
         <p>
           It is time to <strong>publish</strong>!
         </p>
@@ -109,6 +115,9 @@
         </p>
         <p>
           <button id="publish-to-github-and-npm">Publish to GitHub and npm</button>
+        </p>
+        <p class="publishSuccess">
+          Your module has been published to <a id="npmUrl" href="">npm</a> and stored on <a id="githubUrl" href="">GitHub</a>.
         </p>
       </div>
 
