@@ -96,6 +96,7 @@ function afterLogin(user) {
     guide.style.marginTop = "0px";
     
     elems.npmUserName.value = user.login;
+    codeModule.metaData.npmUserName = user.login;
     
     setTimeout(function () {
 
