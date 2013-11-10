@@ -47,20 +47,20 @@
         <h1>NAME</h1>
         <input type="text" name="name" id="moduleName" value="">
         <p>
-          Your module needs a name. This name will be used to create a repository on GitHub as well as name your module for npm.
+          Your module needs a <strong>name</strong>. This name will be used to create a repository on GitHub as well as name your module for npm.
         </p>
       </div>
       
       <div id="deps">
         <p>
-          Does your module have any dependencies?
+          Does your module have any <strong>dependencies</strong>? You can either add them here or by calling require() in your code.
         </p>
         <input type="text" name="depsSearch" id="depsSearch" value="">
         <table id="depsList" class="hidden">
-          <tr>
+          <!-- <tr>
             <th>module</th>
             <th>local variable name</th>
-          </tr>
+          </tr> -->
         </table>
         <p>
           
@@ -69,37 +69,39 @@
       
       <div id="demo">
         <p>
-          A demonstration will help developers to understand how to use your module.
+          A <strong>demonstration</strong> will help developers to understand how to use your module.
         </p>
+        <iframe id="demoFrame"></iframe>
         <textarea id="demoSource"></textarea>
-        <p>
+        <aside>
           This text will be included in the README.md in your module's GitHub repository.
-        </p>
+        </aside>
       </div>
       
       <div id="test">
         <p>
-          Tests will add a layer of robustness and trust to your module and make it more likely to be used by the community.
+          By adding <strong>test code</strong> to your project you'll add a layer of trust to your module that will make it more likely to be used by the community.
         </p>
+        <iframe id="testFrame"></iframe>
         <textarea id="testSource"></textarea>
-        <p>
+        <aside>
           This text will be written to /test/index.js and assumes the lightweight tape testing framework. Additional files and meta data are created for server based testing infrastructure.
-        </p>
+        </aside>
       </div>
       
       <div id="docs">
         <p>
-          A full set of API calls would be great!
+          People using your module would really appreciated some <strong>documentation</strong>. A full set of API calls would be great!
         </p>
         <textarea id="docsSource"></textarea>
-        <p>
+        <aside>
           This text will be included in the README.md in your module's GitHub repository.
-        </p>
+        </aside>
       </div>
       
       <div id="publish">
         <p>
-          It is time to publish!
+          It is time to <strong>publish</strong>!
         </p>
         <p>
           <label for="npmUserName">npm username:</label>

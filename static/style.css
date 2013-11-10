@@ -74,17 +74,42 @@ input {
   margin: 20px 0 20px 0;
 }
 
+#rightPanel strong {
+  color: hsla(220, 80%, 50%, 1.0);
+}
+
+#rightPanel aside {
+  font-family: gentium-basic;
+  font-size: 12px;
+  margin: 20px 0 20px 0;
+}
+
 #login, #docs, #demo, #test, #name, #deps, #publish {
   margin: 70px 20px 20px 20px;
   height: 3200px;
 }
 
+#demo .CodeMirror, #test .CodeMirror {
+  height: 200px;
+}
+
+#demo iframe, #test iframe {
+  height: 200px;
+  width: 100%;
+  border: none;
+  background-color: #eee;
+}
+
+button {
+  border-radius: 2px;
+}
+
 #publish button {
-  font-family: gentium-basic;
-  font-size: 34px;
+  font-family: source-code-pro;
+  font-size: 27px;
   padding: 5px;
-  background-color: hsla(225, 80%, 90%, 1.0);
-  border: 1px solid #ccc;
+  background-color: hsla(220, 70%, 90%, 1.0);
+  border: 1px solid hsla(220, 70%, 50%, 1.0);
 }
 
 #depsList {
@@ -199,7 +224,8 @@ input {
 }
 
 #guide button.active {
-  background-color: hsla(240, 70%, 90%, 1.0);
+  background-color: hsla(220, 70%, 90%, 1.0);
+  border-color: hsla(220, 70%, 50%, 1.0);
 }
 
 #guide button:focus {

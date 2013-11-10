@@ -2,6 +2,7 @@ var document = require("global/document")
 var window = require("global/window")
 var process = require("process")
 var byId = require("by/id")
+var detective = require("detective");
 
 var easing = require("./lib/easing.js");
 var scrollTo = require("./lib/scroll-to");
@@ -237,7 +238,22 @@ var sourceCodeEditor = CodeMirror.fromTextArea(elems.sourceCode, {
 sourceCodeEditor.setSize(window.innerWidth/2, window.innerHeight);
 sourceCodeEditor.on("change", sourceCodeChange);
 function sourceCodeChange() {
-    codeModule.sourceCode = sourceCodeEditor.getValue();
+    var newSource = sourceCodeEditor.getValue();
+    try {
+      var modules = detective(newSource);
+      var newDeps = [];
+      modules.map(function(module) {
+        newDeps.push(module);
+      });
+      if (codeModule.deps.join(",") != newDeps.join(",")) {
+        codeModule.deps = newDeps;
+        updateDepsList();
+      }
+    }
+    catch (e) {
+      
+    }
+    codeModule.sourceCode = newSource;
 }
 sourceCodeEditor.setValue(codeModule.sourceCode);
 
@@ -258,6 +274,7 @@ var demoSourceEditor = CodeMirror.fromTextArea(elems.demoSource, {
     lineNumbers: true,
     theme: "ambiance"
 });
+//demoSourceEditor.getTextArea().nextSibling; // this is the DOM element of the editor...
 demoSourceEditor.on("change", demoSourceChange);
 function demoSourceChange() {
     codeModule.metaData.demoSource = demoSourceEditor.getValue();
@@ -374,8 +391,19 @@ function submitNpmUserName() {
   codeModule.metaData.npmUserName = elems.npmUserName.value;
 }
 
-function addDepToList() {
-  var depName = elems.depsSearch.value;
+function updateDepsList() {
+  elems.depsList.innerHTML = "";
+  for (var i = 0; i < codeModule.deps.length; i++) {
+    var dep = codeModule.deps[i];
+    addDepToList(dep);
+  }
+  if (codeModule.deps.length == 0) {
+    elems.depsList.classList.add("hidden");
+  }
+}
+
+function addDepToList(depName) {
+  
   if (!depName || depName == "") {
     return;
   }
@@ -418,20 +446,18 @@ function addDepToList() {
     console.log("loaded", depName);
   }
   document.head.appendChild(depScript);
-  td2.appendChild(depLocalVarName);
+  //td2.appendChild(depLocalVarName); // we need to do a better mapping of this as well...
   var removeDep = document.createElement("i");
   removeDep.className = "fa fa-times-circle";
   td3.classList.add("close");
   td3.appendChild(removeDep);
   tr.appendChild(td1);
   tr.appendChild(td2);
-  tr.appendChild(td3);
+  //tr.appendChild(td3); // no removeDep GUI for now... we'd need to go in and remove calls to require by searching the AST... 
   elems.depsList.appendChild(tr);
   removeDep.addEventListener("click", function() {
-    elems.depsList.removeChild(tr);
-    if (document.querySelectorAll("#depsList tr").length == 1) {
-      elems.depsList.classList.add("hidden");
-    }
+    var newDeps = codeModule.deps.splice(codeModule.deps.indexOf(depName), 1);
+    updateDepsList();
   });
   elems.depsSearch.value = "";
 }
@@ -450,7 +476,15 @@ elems.npmUserName.addEventListener("keyup", function(event) {
 
 elems.depsSearch.addEventListener("keyup", function(event) {
   if (event.keyCode === 13 && !event.shiftKey) {
-    addDepToList();
+    var depName = elems.depsSearch.value;
+    if (!depName || depName == "") {
+      return;
+    }
+    codeModule.deps.push(depName);
+    var currentSource = sourceCodeEditor.getValue();
+    var newSource = "var " + depName.replace("-", "_") + " = require('" + depName + "')\n" + currentSource;
+    sourceCodeEditor.setValue(newSource);
+    updateDepsList();
   }
 });
 
