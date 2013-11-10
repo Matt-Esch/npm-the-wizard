@@ -15,7 +15,10 @@ var user = require("./lib/user.js")
 
 var codeModule = {
     name: "my-module",
-    metaData: {},
+    metaData: {
+      description: "",
+      demoSource: ""
+    },
     deps: [],
     sourceCode: ""
 };
@@ -203,6 +206,7 @@ var guideSteps = [
     element: elems.docs,
     onSet: function() {
       setTimeout(function() {
+        docsSourceEditor.setValue(createReadme(codeModule));
         docsSourceEditor.focus();
       }, 180);
     }
@@ -406,7 +410,7 @@ function submitName() {
   codeModule.name = name;
   if (codeModule.sourceCode === "") {
     var projectName = camelCase(name)
-    codeModule.sourceCode = "module.exports = " + name + "\n\n" +
+    codeModule.sourceCode = "\nmodule.exports = " + name + "\n\n" +
       "function " + name + "() {\n\n}\n"
     sourceCodeEditor.setValue(codeModule.sourceCode);
   }
@@ -551,12 +555,12 @@ function createReadme(module) {
   var user = JSON.parse(localStorage.getItem("user"))
 
   return "# " + module.name + "\n\n" + 
-    module.metaData.description + "\n\n"
+    module.metaData.description + "\n\n" +
     "## Example\n\n" +
     "```js\n" + module.metaData.demoSource +
     "\n```\n\n" +
     "## Installation\n\n" +
-    "`npm install " + name + "`\n\n" +
+    "`npm install " + module.name + "`\n\n" +
     "## Contributors\n\n" +
     " - " + user.login + "\n\n" +
     "## MIT Licenced\n\n"
