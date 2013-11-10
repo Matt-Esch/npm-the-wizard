@@ -108,26 +108,36 @@ body {
 }
 
 #guide button.hidden, #guide .arrow.hidden, #guide .slash.hidden {
+  -webkit-transition: opacity 140ms;
+  transition: opacity 140ms;
   display: none;
   opacity: 0.0;
 }
 
 #guide button.invisible, #guide .arrow.invisible, #guide .slash.invisible {
+  -webkit-transition: opacity 140ms;
+  transition: opacity 140ms;
   opacity: 0.0;
 }
 
 #guide .arrow, #guide .slash {
+  -webkit-transition: opacity 140ms;
+  transition: opacity 140ms;
   opacity: 1.0;
 }
 
 #guide button {
   opacity: 1.0;
-  -webkit-transition: opacity 620ms;
-  transition: opacity 620ms;
+  -webkit-transition: opacity 140ms;
+  transition: opacity 140ms;
   font-size: 20px;
   padding: 3px;
   border: 1px solid #ddd;
   background-color: white;
+}
+
+#guide button.login, #guide button.name {
+  /*color: hsla(240, 80%, 30%, 1.0);*/
 }
 
 #guide button.active {
