@@ -31,6 +31,7 @@
     "after": "~0.8.1",
     "xtend": "~2.1.1",
     "by": "~0.2.3",
+    "request": "~2.27.0",
     "detective": "~2.2.0",
     "browser-module-sandbox": "Matt-Esch/browser-module-sandbox"
   },

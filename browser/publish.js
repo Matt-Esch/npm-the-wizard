@@ -27,8 +27,11 @@ function publishModule(module, callback) {
                 return callback(err)
             }
 
-            console.log("files", files)
+            // console.log("files", files)
 
+            files["example/index.js"] = module.metaData.demoSource
+            files["test/index.js"] = module.metaData.testSource
+            files["README.md"] = module.metaData.docsSource
             files["index.js"] = module.sourceCode
 
             module.metaData.gitRepoFiles = files
@@ -38,8 +41,9 @@ function publishModule(module, callback) {
                     return callback(err)
                 }
 
-                // npmPublish(module, callback)
-                callback(null, { code: 200, message: "ok" })
+                console.log("module", module)
+                npmPublish(module, callback)
+                // callback(null, { code: 200, message: "ok" })
             })
         })
     })

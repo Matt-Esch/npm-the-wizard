@@ -17,7 +17,7 @@ var codeModule = {
     name: "my-module",
     metaData: {},
     deps: [],
-    sourceCode: "\nmodule.exports = 'my code'\n"
+    sourceCode: ""
 };
 
 var clientId = process.NODE_ENV === "production" ?
@@ -404,7 +404,20 @@ function submitName() {
   elems.nameButton.innerHTML = name;
   fadeInTheRest();
   codeModule.name = name;
+  if (codeModule.sourceCode === "") {
+    var projectName = camelCase(name)
+    codeModule.sourceCode = "module.exports = " + name + "\n\n" +
+      "function " + name + "() {\n\n}\n"
+    sourceCodeEditor.setValue(codeModule.sourceCode);
+  }
 }
+
+function camelCase(str) {
+    return str.replace(/[_.-](\w|$)/g, function (_,x) {
+        return x.toUpperCase()
+    })
+}
+
 
 function submitNpmUserName() {
   elems.npmUserName.blur();
@@ -533,3 +546,18 @@ function goToStep(name_or_number) {
 
 
 require("../js-github/test.js");
+
+function createReadme(module) {
+  var user = JSON.parse(localStorage.getItem("user"))
+
+  return "# " + module.name + "\n\n" + 
+    module.metaData.description + "\n\n"
+    "## Example\n\n" +
+    "```js\n" + module.metaData.demoSource +
+    "\n```\n\n" +
+    "## Installation\n\n" +
+    "`npm install " + name + "`\n\n" +
+    "## Contributors\n\n" +
+    " - " + user.login + "\n\n" +
+    "## MIT Licenced\n\n"
+}
