@@ -80,12 +80,15 @@ window.addEventListener("message", function tokenPostMessage(event) {
 function afterLogin(user) {
   console.log(user);
     elems.loginButton.innerHTML = user.login || "unknown";
-
+    
     elems.loginButton.offsetWidth;
     elems.guide.classList.remove("login");
     elems.guide.classList.add("settled");
     guide.style.marginLeft = "0px";
     guide.style.marginTop = "0px";
+    
+    elems.npmUserName.value = user.login;
+    
     setTimeout(function () {
 
         document.body.classList.add("loggedIn");
@@ -136,6 +139,7 @@ var guideSteps = [
     onSet: function() {
       setTimeout(function() {
         elems.moduleName.focus();
+        elems.moduleName.select();
       }, 180);
     }
   },
@@ -191,6 +195,7 @@ var guideSteps = [
     onSet: function() {
       setTimeout(function() {
         elems.npmUserName.focus();
+        elems.npmUserName.select();
       }, 180);
     }
   }
@@ -370,6 +375,9 @@ function submitNpmUserName() {
 
 function addDepToList() {
   var depName = elems.depsSearch.value;
+  if (!depName || depName == "") {
+    return;
+  }
   /*
   <tr>
     <td>byId</td>
@@ -389,6 +397,7 @@ function addDepToList() {
   td2.appendChild(depLocalVarName);
   var removeDep = document.createElement("i");
   removeDep.className = "fa fa-times-circle";
+  td3.classList.add("close");
   td3.appendChild(removeDep);
   tr.appendChild(td1);
   tr.appendChild(td2);
@@ -400,6 +409,7 @@ function addDepToList() {
       elems.depsList.classList.add("hidden");
     }
   });
+  elems.depsSearch.value = "";
 }
 
 elems.moduleName.addEventListener("keyup", function(event) {
@@ -415,7 +425,7 @@ elems.npmUserName.addEventListener("keyup", function(event) {
 });
 
 elems.depsSearch.addEventListener("keyup", function(event) {
-  if (event.keyCode === 13) {
+  if (event.keyCode === 13 && !event.shiftKey) {
     addDepToList();
   }
 });

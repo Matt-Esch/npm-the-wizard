@@ -116,6 +116,10 @@ input {
   padding: 5px 10px;
 }
 
+#deps table td.close {
+  padding: 0px 0px;
+}
+
 #deps table input {
   font-family: source-code-pro;
   width: 200px;
