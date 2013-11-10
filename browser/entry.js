@@ -71,7 +71,8 @@ window.addEventListener("message", function tokenPostMessage(event) {
 }, false)
 
 function afterLogin(user) {
-    elems.loginButton.innerHTML = user.name || "unknown";
+  console.log(user);
+    elems.loginButton.innerHTML = user.login || "unknown";
 
     elems.loginButton.offsetWidth;
     elems.guide.classList.remove("login");
