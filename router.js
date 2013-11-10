@@ -27,7 +27,8 @@ router.addRoute("/static/*", mount)
 
 router.addRoute("/entry.js", function (req, res) {
     ServeBrowserify({
-        root: path.join(__dirname, "browser")
+        root: path.join(__dirname, "browser"),
+        gzip: true
     })(req, res)
 })
 
