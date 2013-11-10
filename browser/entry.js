@@ -1,4 +1,6 @@
 var document = require("global/document")
+var window = require("global/window")
+var process = require("process")
 var byId = require("by/id")
 
 var easing = require("./lib/easing.js")
@@ -6,7 +8,8 @@ var scrollTo = require("./lib/scroll-to")
 
 var publishToRepo = require("./publish.js")
 var CodeMirror = require("./lib/code-mirror.js")
-//var loginGithub = require("./lib/auth.js")
+var auth = require("./lib/auth.js")
+var user = require("./lib/user.js")
 
 var codeModule = {
     name: "my-module",
@@ -15,7 +18,9 @@ var codeModule = {
     sourceCode: "module.exports = 'my code'"
 }
 
-window.auth = require("./lib/auth.js")
+var clientId = process.NODE_ENV === "production" ?
+    "33a829c575f90153055a" :
+    "e58ca5fd53f376b061d2"
 
 var elems = {
     guide: byId("guide"),
@@ -45,55 +50,72 @@ var elems = {
     blackout: byId("blackout")
 }
 
-guideSteps = [
-  {
-    name: "login",
-    buttonElement: elems.loginButton,
-    element: elems.login,
-    onSet: function() {
-      var githubUsername = "williamcotton";
-      elems.loginButton.innerHTML = githubUsername;
+window.addEventListener("message", function tokenPostMessage(event) {
+    if (!event || !event.data || !event.data.token) {
+        return
+    }
 
-      elems.loginButton.offsetWidth;
-      elems.guide.classList.remove("login");
-      elems.guide.classList.add("settled");
-      guide.style.marginLeft = "0px";
-      guide.style.marginTop = "0px";
-      setTimeout(function() {
+    var token = event.data.token
+    console.log(token)
+
+    localStorage.setItem("token", token)
+
+    // fetch user credentials
+    user(token, function (err, user) {
+        if (err) {
+            return console.log(err)
+        }
+
+        localStorage.setItem("user", JSON.stringify(user))
+        afterLogin(user)
+    })
+}, false)
+
+function afterLogin(user) {
+    elems.loginButton.innerHTML = user.name || "unknown";
+
+    elems.loginButton.offsetWidth;
+    elems.guide.classList.remove("login");
+    elems.guide.classList.add("settled");
+    guide.style.marginLeft = "0px";
+    guide.style.marginTop = "0px";
+    setTimeout(function() {
+
         document.body.classList.add("loggedIn");
-        setTimeout(function() {
-          elems.blackout.style.display = "none";
+        setTimeout(function () {
+              elems.blackout.style.display = "none";
         })
+
         fadeInElement(elems.nameSlash, 1);
         fadeInElement(elems.nameButton, 20);
         goToNextStep();
 
-      }, 500);
+    }, 500);
 
-      var hasFaded = false;
-      setTimeout(function() {
+    var hasFaded = false;
+    setTimeout(function() {
         elems.scroll.addEventListener("scroll", function() {
-          if (!hasFaded) {
-            fadeInTheRest();
-            hasFaded = true;
-          }
+            if (!hasFaded) {
+                fadeInTheRest();
+                hasFaded = true;
+            }
         });
-      }, 1200);
+    }, 1200);
 
-      document.body.addEventListener("keyup", function(event) {
+    document.body.addEventListener("keyup", function(event) {
         if ((event.keyCode == 78 || event.keyCode == 13) && document.body == document.activeElement) {
-          goToNextStep();
+            goToNextStep();
         }
-      });
+    });
+}
 
-      return;
-
-      loginGithub(function(obj) {
-          var token = obj.token;
-          var github_details = obj.github_details;
-          localStorage.setItem("token", JSON.stringify(token));
-          localStorage.setItem("github_details", JSON.stringify(github_details));
-      });
+var guideSteps = [
+  {
+    name: "login",
+    buttonElement: elems.loginButton,
+    element: elems.login,
+    onSet: function () {
+        auth(clientId)
     }
   },
   {
