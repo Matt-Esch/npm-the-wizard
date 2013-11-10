@@ -71,7 +71,7 @@ var elems = {
     testFrame: byId("testFrame")
 };
 
-var exampleSandbox = sandbox({
+var demoSandbox = sandbox({
     cdn: "http://wzrd.in",
     container: elems.demoFrame
 })
@@ -81,12 +81,6 @@ var testSandbox = sandbox({
     cdn: "http://wzrd.in",
     container: elems.testFrame
 })
-
-// example(exampleSandbox, {
-//   moduleName: "lulz",
-//   moduleCode: "module.exports = function () { console.log(\"lulz\") }",
-//   sourceCode: "require(\"../index.js\")(); document.body.style.backgroundColor='pink'"
-//})
 
 window.addEventListener("message", function tokenPostMessage(event) {
     if (!event || !event.data || !event.data.token) {
@@ -322,6 +316,11 @@ var testSourceEditor = CodeMirror.fromTextArea(elems.testSource, {
 testSourceEditor.on("change", testSourceChange);
 function testSourceChange() {
     codeModule.metaData.testSource = testSourceEditor.getValue();
+    example(testSandbox, {
+      moduleName: codeModule.name,
+      moduleCode: codeModule.sourceCode,
+      sourceCode: codeModule.metaData.testSource
+    });
 }
 
 var demoSourceEditor = CodeMirror.fromTextArea(elems.demoSource, {
@@ -334,6 +333,11 @@ var demoSourceEditor = CodeMirror.fromTextArea(elems.demoSource, {
 demoSourceEditor.on("change", demoSourceChange);
 function demoSourceChange() {
     codeModule.metaData.demoSource = demoSourceEditor.getValue();
+    example(demoSandbox, {
+      moduleName: codeModule.name,
+      moduleCode: codeModule.sourceCode,
+      sourceCode: codeModule.metaData.demoSource
+    });
 }
 
 var docsSourceEditor = CodeMirror.fromTextArea(elems.docsSource, {
@@ -518,7 +522,6 @@ function submitName() {
   var name = elems.moduleName.value;
   elems.nameButton.innerHTML = name;
   fadeInTheRest();
-  codeModule.name = name;
   if (codeModule.sourceCode === "") {
     var projectName = camelCase(name)
     codeModule.sourceCode = "\nmodule.exports = " + projectName + "\n\n" +
@@ -539,18 +542,21 @@ function submitNpmUserName() {
 }
 
 elems.moduleName.addEventListener("keyup", function(event) {
+  codeModule.name = elems.moduleName.value;
   if (event.keyCode === 13) {
     submitName();
   }
 });
 
 elems.description.addEventListener("keyup", function(event) {
+  codeModule.metaData.description = elems.description.value;
   if (event.keyCode === 13) {
     submitDescription();
   }
 });
 
 elems.npmUserName.addEventListener("keyup", function(event) {
+  codeModule.metaData.npmUserName = elems.npmUserName.value;
   if (event.keyCode === 13) {
     submitNpmUserName();
   }
