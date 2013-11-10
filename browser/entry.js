@@ -1,6 +1,7 @@
 var document = require("global/document")
 var window = require("global/window")
 var process = require("process")
+var sandbox = require("browser-module-sandbox")
 var byId = require("by/id")
 var detective = require("detective");
 
@@ -57,6 +58,13 @@ var elems = {
     depsList: byId("depsList"),
     blackout: byId("blackout")
 };
+
+/*var exampleSandbox = sandbox({
+    cdn: "http://wzrd.in",
+    container: document.body
+})*/
+
+//window.exampleSandbox = exampleSandbox
 
 window.addEventListener("message", function tokenPostMessage(event) {
     if (!event || !event.data || !event.data.token) {
