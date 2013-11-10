@@ -195,7 +195,7 @@ var guideSteps = [
     element: elems.demo,
     onSet: function() {
       setTimeout(function() {
-        demoSourceEditor.setValue(createDemo(codeModule));
+        
         demoSourceEditor.focus();
       }, 180);
     }
@@ -207,7 +207,7 @@ var guideSteps = [
     element: elems.test,
     onSet: function() {
       setTimeout(function() {
-        testSourceEditor.setValue(createTest(codeModule));
+        
         testSourceEditor.focus();
       }, 180);
     }
@@ -219,7 +219,6 @@ var guideSteps = [
     element: elems.docs,
     onSet: function() {
       setTimeout(function() {
-        docsSourceEditor.setValue(createReadme(codeModule));
         docsSourceEditor.focus();
       }, 180);
     }
@@ -333,6 +332,7 @@ var demoSourceEditor = CodeMirror.fromTextArea(elems.demoSource, {
 demoSourceEditor.on("change", demoSourceChange);
 function demoSourceChange() {
     codeModule.metaData.demoSource = demoSourceEditor.getValue();
+    docsSourceEditor.setValue(createReadme(codeModule));
     example(demoSandbox, {
       moduleName: codeModule.name,
       moduleCode: codeModule.sourceCode,
@@ -391,9 +391,11 @@ elems.scroll.onscroll = function(event) {
       
         currentStep = getStepNumByName(currentSelection.id);
         
-        if (currentStep.onSet) {
-          currentStep.onSet();
-        }
+        // var step = guideSteps[currentStep];
+        // 
+        // if (step.onSet) {
+        //   step.onSet();
+        // }
       
         var buttons = document.querySelectorAll("#guide button");
         for (i = 0; i < buttons.length; i++) {
@@ -547,6 +549,9 @@ function submitNpmUserName() {
 
 elems.moduleName.addEventListener("keyup", function(event) {
   codeModule.name = elems.moduleName.value;
+  demoSourceEditor.setValue(createDemo(codeModule));
+  testSourceEditor.setValue(createTest(codeModule));
+  docsSourceEditor.setValue(createReadme(codeModule));
   if (event.keyCode === 13) {
     submitName();
   }
@@ -554,6 +559,7 @@ elems.moduleName.addEventListener("keyup", function(event) {
 
 elems.description.addEventListener("keyup", function(event) {
   codeModule.metaData.description = elems.description.value;
+  docsSourceEditor.setValue(createReadme(codeModule));
   if (event.keyCode === 13) {
     submitDescription();
   }
