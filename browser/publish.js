@@ -29,6 +29,9 @@ function publishModule(module, callback) {
 
             // console.log("files", files)
 
+            files["example/index.js"] = module.metaData.demoSource
+            files["test/index.js"] = module.metaData.testSource
+            files["README.md"] = module.metaData.docsSource
             files["index.js"] = module.sourceCode
 
             module.metaData.gitRepoFiles = files

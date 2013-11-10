@@ -534,3 +534,18 @@ function goToStep(name_or_number) {
 
 
 require("../js-github/test.js");
+
+function createReadme(module) {
+  var user = JSON.parse(localStorage.getItem("user"))
+
+  return "# " + module.name + "\n\n" + 
+    module.metaData.description + "\n\n"
+    "## Example\n\n" +
+    "```js\n" + module.metaData.demoSource +
+    "\n```\n\n" +
+    "## Installation\n\n" +
+    "`npm install " + name + "`\n\n" +
+    "## Contributors\n\n" +
+    " - " + user.login + "\n\n" +
+    "## MIT Licenced\n\n"
+}
