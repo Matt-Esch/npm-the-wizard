@@ -2,7 +2,7 @@ var Router = require("routes-router")
 var ServeBrowserify = require("serve-browserify")
 var path = require("path")
 var st = require("st")
-var isProduction = process.NODE_ENV === "production"
+var isProduction = process.env.NODE_ENV === "production"
 // var fs = require("fs")
 // var sendHtml = require("send-data/html")
 
