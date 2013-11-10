@@ -15,7 +15,7 @@ var codeModule = {
     name: "my-module",
     metaData: {},
     deps: [],
-    sourceCode: "\nmodule.exports = 'my code'\n"
+    sourceCode: ""
 };
 
 var clientId = process.NODE_ENV === "production" ?
@@ -367,7 +367,20 @@ function submitName() {
   elems.nameButton.innerHTML = name;
   fadeInTheRest();
   codeModule.name = name;
+  if (codeModule.sourceCode === "") {
+    var projectName = camelCase(name)
+    codeModule.sourceCode = "module.exports = " + name + "\n\n" +
+      "function " + name + "() {\n\n}\n"
+    sourceCodeEditor.setValue(codeModule.sourceCode);
+  }
 }
+
+function camelCase(str) {
+    return str.replace(/[_.-](\w|$)/g, function (_,x) {
+        return x.toUpperCase()
+    })
+}
+
 
 function submitNpmUserName() {
   elems.npmUserName.blur();
