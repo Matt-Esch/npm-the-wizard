@@ -1,7 +1,7 @@
 var document = require("global/document")
 var window = require("global/window")
 
-var gh = "https://github.com/login/oauth/authorize?scope=public_repo&client_id="
+var gh = "https://github.com/login/oauth/authorize?scope=public_repo,repo&client_id="
 
 module.exports = getAuth
 

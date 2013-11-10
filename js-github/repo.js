@@ -4,6 +4,8 @@ module.exports = function (root, accessToken) {
     apiGet: apiGet,
     apiPost: apiPost
   };
+  
+  console.log(accessToken);
 
   // if (!accessToken) {
   //   accessToken = prompt("Entrt github token");
