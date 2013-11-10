@@ -23,7 +23,7 @@ var codeModule = {
     sourceCode: ""
 };
 
-var clientId = process.NODE_ENV === "production" ?
+var clientId = process.env.NODE_ENV === "production" ?
     "33a829c575f90153055a" :
     "e58ca5fd53f376b061d2"
 
