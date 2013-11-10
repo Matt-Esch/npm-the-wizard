@@ -238,6 +238,7 @@ elems.publishToGitHubAndNpm.addEventListener("click", function() {
   elems.publishToGitHubAndNpm.innerHTML = "Publishing to GitHub and npm...";
   publishToRepo(codeModule, function(err, res) {
       if (err) {
+          console.log("ERROR", err, err.message)
           return;
       }
       //console.log("res", res);
