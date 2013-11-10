@@ -125,6 +125,11 @@ input {
   width: 200px;
 }
 
+#deps a {
+  text-decoration: none;
+  color: black;
+}
+
 #guide.deactivated {
   opacity: 0.0;
 }

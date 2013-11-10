@@ -285,7 +285,7 @@ function windowResize(event) {
   var panes = document.querySelectorAll("#login, #docs, #demo, #test, #name, #deps, #publish");
   for (var i = 0; i < panes.length; i++) {
     var p = panes[i];
-    p.style.height = window.innerHeight + "px";
+    p.style.height = window.innerHeight-80 + "px";
   }
 }
 windowResize();
@@ -390,10 +390,33 @@ function addDepToList() {
   var td1 = document.createElement("td");
   var td2 = document.createElement("td");
   var td3 = document.createElement("td");
-  td1.innerHTML = depName;
+  var npmLink = document.createElement("a");
+  npmLink.href = "https://npmjs.org/package/" + depName;
+  npmLink.innerHTML = depName;
+  td1.appendChild(npmLink);
   var depLocalVarName = document.createElement("input");
   depLocalVarName.type = "text";
-  depLocalVarName.value = depName;
+  depLocalVarName.value = depName.replace("-", "_");
+  
+  var localVarName = depLocalVarName.value;
+  depLocalVarName.addEventListener("keyup", function() {
+    var newVarName = depLocalVarName.value;
+    if (newVarName == localVarName) {
+      return;
+    }
+    window[newVarName] = window[localVarName];
+    delete window[localVarName];
+    localVarName = newVarName;
+  });
+  
+  var depScript = document.createElement("script");
+  depScript.type = "text/javascript";
+  depScript.charset = "utf-8";
+  depScript.src = "http://wzrd.in/standalone/" + depName + "@latest";
+  depScript.onload = depScript.onreadystatechange = function() {
+    console.log("loaded", depName);
+  }
+  document.head.appendChild(depScript);
   td2.appendChild(depLocalVarName);
   var removeDep = document.createElement("i");
   removeDep.className = "fa fa-times-circle";
@@ -431,7 +454,13 @@ elems.depsSearch.addEventListener("keyup", function(event) {
 });
 
 function goToNextStep() {
-  return goToStep(currentStep + 1);
+  if (currentStep + 1 >= guideSteps.length) {
+    console.log("publish??");
+    return guideSteps[currentStep];
+  }
+  else {
+    return goToStep(currentStep + 1);
+  }
 }
 
 function goToStep(name_or_number) {
