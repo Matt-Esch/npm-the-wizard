@@ -4,10 +4,8 @@ module.exports = user
 
 function user(token, cb) {
     xhr({
-        uri: "https://api.github.com/user",
-        json: {
-            token: token
-        }
+        uri: "https://api.github.com/user?access_token=" + token,
+        json: true
     }, function(err, resp, body) {
         if (err) {
             return cb(err)
