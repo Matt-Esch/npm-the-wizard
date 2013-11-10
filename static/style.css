@@ -93,7 +93,7 @@ input {
   height: 200px;
 }
 
-#demo iframe, #test iframe {
+.iframe-container {
   height: 200px;
   width: 100%;
   border: none;

@@ -59,12 +59,13 @@ var elems = {
     sourceCode: byId("sourceCode"),
     depsSearch: byId("depsSearch"),
     depsList: byId("depsList"),
-    blackout: byId("blackout")
+    blackout: byId("blackout"),
+    demoFrame: byId("demoFrame")
 };
 
 var exampleSandbox = sandbox({
     cdn: "http://wzrd.in",
-    container: document.body
+    container: elems.demoFrame
 })
 
 window.exampleSandbox = exampleSandbox
