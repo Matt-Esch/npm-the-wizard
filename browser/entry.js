@@ -410,8 +410,8 @@ function submitName() {
   codeModule.name = name;
   if (codeModule.sourceCode === "") {
     var projectName = camelCase(name)
-    codeModule.sourceCode = "\nmodule.exports = " + name + "\n\n" +
-      "function " + name + "() {\n\n}\n"
+    codeModule.sourceCode = "\nmodule.exports = " + projectName + "\n\n" +
+      "function " + projectName + "() {\n\n}\n"
     sourceCodeEditor.setValue(codeModule.sourceCode);
   }
 }
@@ -554,14 +554,30 @@ require("../js-github/test.js");
 function createReadme(module) {
   var user = JSON.parse(localStorage.getItem("user"))
 
-  return "# " + module.name + "\n\n" + 
-    module.metaData.description + "\n\n" +
-    "## Example\n\n" +
+  return "# " + module.name + "\n" + 
+    module.metaData.description + "\n" +
+    "## Example\n" +
     "```js\n" + module.metaData.demoSource +
     "\n```\n\n" +
     "## Installation\n\n" +
     "`npm install " + module.name + "`\n\n" +
     "## Contributors\n\n" +
     " - " + user.login + "\n\n" +
-    "## MIT Licenced\n\n"
+    "## MIT Licenced\n"
+}
+
+function createTest(module) {
+  var projectName = camelCase(module.name)
+  return "var test = require(\"tape\")\n\n" +
+    "var " + projectName + " = require(\"../index.js\")\n\n" +
+    "test(\"" + projectName + " is a function\", function (assert) {\n" +
+    "    assert.equal(typeof " + projectName + ", \"function\")\n" +
+    "    assert.end()\n" +
+    "})\n"
+}
+
+function createDemo(module) {
+  var projectName = camelCase(module.name)
+  return "var " + projectName + " = require(\"" + module.name + "\")\n\n" +
+    "// TODO. Show example\n"
 }
