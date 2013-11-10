@@ -45,24 +45,13 @@ function publishRoute(req, res) {
                     return sendError(req, res, err)
                 }
 
-                console.log("stdout", stdout)
-                console.log("stderr", stderr)
+                // console.log("stdout", stdout)
+                // console.log("stderr", stderr)
 
                 sendJson(req, res, {
                     code: 200,
                     message: "ok"
                 })
             })
-
-        // publish(body.github, body.userName, function (err, resp) {
-        //     if (err) {
-        //         return sendError(req, res, err)
-        //     }
-
-        //     sendJson(req, res, {
-        //         code: 200,
-        //         message: "ok"
-        //     })
-        // })
     })
 }

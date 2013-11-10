@@ -65,6 +65,7 @@ function npmPublish(module, callback) {
             github: module.metaData.githubFragment
         }
     }, function (err, res) {
+        console.log("err", err, res)
         if (err) {
             return callback(err)
         }
