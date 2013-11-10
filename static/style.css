@@ -10,7 +10,6 @@ body {
 }
 
 * {
-  font-family: gentium-basic;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -60,17 +59,23 @@ body {
   background-color: white;
 }
 
+.CodeMirror * {
+  font-family: source-code-pro;
+  font-size: 16px;
+}
+
 #rightPanel h1 {
   display: none;
 }
 
 #rightPanel p {
+  font-family: gentium-basic;
   font-size: 20px;
   margin: 20px 0 0px 0;
 }
 
 #login, #docs, #demo, #test, #name, #deps, #publish {
-  margin: 60px 20px 20px 20px;
+  margin: 70px 20px 20px 20px;
   height: 800px;
 }
 
@@ -83,7 +88,7 @@ body {
 }
 
 #guide.login {
-  transition: opacity 120ms, top 120ms, -webkit-transform 120ms;
+  transition: opacity 180ms, top 180ms, -webkit-transform 180ms;
   -webkit-transform: scale(4.0);
   top: 50%;
   left: 50%;
@@ -98,11 +103,11 @@ body {
 }
 
 #guide {
-  transition: opacity 120ms, top 120ms, margin 120ms, -webkit-transform 120ms;
-  -webkit-transition: opacity 120ms, top 120ms, margin 120ms, -webkit-transform 120ms;
+  transition: opacity 180ms, top 180ms, margin 180ms, -webkit-transform 180ms;
+  -webkit-transition: opacity 180ms, top 180ms, margin 180ms, -webkit-transform 180ms;
   transition-timing-function: ease-in;
   -webkit-transition-timing-function: ease-in;
-  padding: 10px 10px 10px 20px;
+  padding: 20px 10px 10px 20px;
   position: fixed;
   z-index: 30;
 }
@@ -127,11 +132,13 @@ body {
 }
 
 #guide button {
+  font-family: source-code-pro;
   opacity: 1.0;
   -webkit-transition: opacity 140ms;
   transition: opacity 140ms;
-  font-size: 20px;
-  padding: 3px;
+  font-size: 16px;
+  letter-spacing: -0.75px;
+  padding: 1px 5px;
   border: 1px solid #ddd;
   background-color: white;
 }
@@ -149,8 +156,8 @@ body {
 }
 
 #blackout {
-  -webkit-transition: opacity 120ms;
-  transition: opacity 120ms;
+  -webkit-transition: opacity 180ms;
+  transition: opacity 180ms;
   opacity: 0.7;
   background-color: black;
   width: 100%;

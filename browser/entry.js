@@ -12,7 +12,7 @@ var codeModule = {
     name: "my-module",
     metaData: {},
     deps: [],
-    sourceCode: "module.exports = 'my code'"
+    sourceCode: "\nmodule.exports = 'my code'\n"
 };
 
 window.auth = require("./lib/auth.js");
@@ -77,7 +77,7 @@ guideSteps = [
             hasFaded = true;
           }
         });
-      }, 1200);
+      }, 1210);
 
       document.body.addEventListener("keyup", function(event) {
         if ((event.keyCode == 78 || event.keyCode == 13) && document.body == document.activeElement) {
@@ -103,7 +103,7 @@ guideSteps = [
     onSet: function() {
       setTimeout(function() {
         elems.moduleName.focus();
-      }, 120);
+      }, 180);
     }
   },
   {
@@ -150,7 +150,7 @@ var currentStep = 0;
 
 function createGuideStep(step) {
   step.scrollToCommand = function() {
-    scrollTo(step.element.offsetTop-60, elems.scroll, 120, easing.easeInQuad);
+    scrollTo(step.element.offsetTop-70, elems.scroll, 180, easing.easeInQuad);
     if (step.onSet) {
       step.onSet();
     }
@@ -205,7 +205,7 @@ elems.scroll.onscroll = function(event) {
     var currentSelection, i;
     for (i = 0; i < guideSteps.length; i++) {
         var section = guideSteps[i].element;
-        if (elems.scroll.scrollTop > section.offsetTop - 61) {
+        if (elems.scroll.scrollTop > section.offsetTop - 71) {
             currentSelection = section;
         }
     }
