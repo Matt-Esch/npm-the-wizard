@@ -390,6 +390,10 @@ elems.scroll.onscroll = function(event) {
     if (currentSelection.id) {
       
         currentStep = getStepNumByName(currentSelection.id);
+        
+        if (currentStep.onSet) {
+          currentStep.onSet();
+        }
       
         var buttons = document.querySelectorAll("#guide button");
         for (i = 0; i < buttons.length; i++) {
