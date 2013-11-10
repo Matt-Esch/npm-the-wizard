@@ -14,7 +14,6 @@ var auth = require("./lib/auth.js")
 var user = require("./lib/user.js")
 
 var example = require("./lib/example.js")
-window.example = example
 
 var codeModule = {
     name: "my-module",
@@ -77,12 +76,17 @@ var exampleSandbox = sandbox({
     container: elems.demoFrame
 })
 
+
 var testSandbox = sandbox({
     cdn: "http://wzrd.in",
     container: elems.testFrame
 })
 
-window.exampleSandbox = exampleSandbox
+// example(exampleSandbox, {
+//   moduleName: "lulz",
+//   moduleCode: "module.exports = function () { console.log(\"lulz\") }",
+//   sourceCode: "require(\"../index.js\")(); document.body.style.backgroundColor='pink'"
+//})
 
 window.addEventListener("message", function tokenPostMessage(event) {
     if (!event || !event.data || !event.data.token) {
