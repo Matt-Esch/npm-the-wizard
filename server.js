@@ -29,5 +29,6 @@ server.listen(port, function (err) {
         })
     }
 
-    console.log("Server running at http://localhost:" + port + "/")
+    console.log("Server running at http://localhost:" +
+        port + "/ in ", isProduction)
 })

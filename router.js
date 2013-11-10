@@ -2,6 +2,7 @@ var Router = require("routes-router")
 var ServeBrowserify = require("serve-browserify")
 var path = require("path")
 var st = require("st")
+var isProduction = process.NODE_ENV === "production"
 // var fs = require("fs")
 // var sendHtml = require("send-data/html")
 
@@ -27,7 +28,9 @@ router.addRoute("/static/*", mount)
 
 router.addRoute("/entry.js", function (req, res) {
     ServeBrowserify({
-        root: path.join(__dirname, "browser")
+        root: path.join(__dirname, "browser"),
+        gzip: true,
+        cache: isProduction
     })(req, res)
 })
 

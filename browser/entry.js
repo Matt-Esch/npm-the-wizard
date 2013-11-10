@@ -18,12 +18,15 @@ window.example = example
 
 var codeModule = {
     name: "my-module",
-    metaData: {},
+    metaData: {
+      description: "",
+      demoSource: ""
+    },
     deps: [],
     sourceCode: ""
 };
 
-var clientId = process.env.NODE_ENV === "production" ?
+var clientId = window.NODE_ENV === "production" ?
     "33a829c575f90153055a" :
     "e58ca5fd53f376b061d2"
 
@@ -58,6 +61,8 @@ var elems = {
     demoSource: byId("demoSource"),
     sourceCode: byId("sourceCode"),
     depsSearch: byId("depsSearch"),
+    rightPanel: byId("rightPanel"),
+    leftPanel: byId("leftPanel"),
     depsList: byId("depsList"),
     blackout: byId("blackout"),
     demoFrame: byId("demoFrame")
@@ -112,7 +117,9 @@ function afterLogin(user) {
 
         fadeInElement(elems.nameSlash, 1);
         fadeInElement(elems.nameButton, 20);
+        
         goToNextStep();
+
 
     }, 500);
 
@@ -154,6 +161,12 @@ var guideSteps = [
       setTimeout(function() {
         elems.moduleName.focus();
         elems.moduleName.select();
+        
+        setTimeout(function() {
+          elems.login.style.height = "0px";
+          elems.rightPanel.scrollTop = "0px";
+        }, 20);
+        
       }, 180);
     }
   },
@@ -197,6 +210,7 @@ var guideSteps = [
     element: elems.docs,
     onSet: function() {
       setTimeout(function() {
+        docsSourceEditor.setValue(createReadme(codeModule));
         docsSourceEditor.focus();
       }, 180);
     }
@@ -315,7 +329,9 @@ function windowResize(event) {
   var panes = document.querySelectorAll("#login, #docs, #demo, #test, #name, #deps, #publish");
   for (var i = 0; i < panes.length; i++) {
     var p = panes[i];
-    p.style.height = window.innerHeight-80 + "px";
+    if (p.id != "login") {
+      p.style.height = window.innerHeight-80 + "px";
+    }
   }
 }
 windowResize();
@@ -398,8 +414,8 @@ function submitName() {
   codeModule.name = name;
   if (codeModule.sourceCode === "") {
     var projectName = camelCase(name)
-    codeModule.sourceCode = "module.exports = " + name + "\n\n" +
-      "function " + name + "() {\n\n}\n"
+    codeModule.sourceCode = "\nmodule.exports = " + projectName + "\n\n" +
+      "function " + projectName + "() {\n\n}\n"
     sourceCodeEditor.setValue(codeModule.sourceCode);
   }
 }
@@ -468,16 +484,16 @@ function addDepToList(depName) {
   depScript.charset = "utf-8";
   depScript.src = "http://wzrd.in/standalone/" + depName + "@latest";
   depScript.onload = depScript.onreadystatechange = function() {
-    console.log("loaded", depName);
+    //console.log("loaded", depName);
   }
   document.head.appendChild(depScript);
-  //td2.appendChild(depLocalVarName); // we need to do a better mapping of this as well...
+  td2.appendChild(depLocalVarName); // we need to do a better mapping of this as well...
   var removeDep = document.createElement("i");
   removeDep.className = "fa fa-times-circle";
   td3.classList.add("close");
   td3.appendChild(removeDep);
   tr.appendChild(td1);
-  tr.appendChild(td2);
+  //tr.appendChild(td2);
   //tr.appendChild(td3); // no removeDep GUI for now... we'd need to go in and remove calls to require by searching the AST... 
   elems.depsList.appendChild(tr);
   removeDep.addEventListener("click", function() {
@@ -515,7 +531,7 @@ elems.depsSearch.addEventListener("keyup", function(event) {
 
 function goToNextStep() {
   if (currentStep + 1 >= guideSteps.length) {
-    console.log("publish??");
+    //console.log("publish??");
     return guideSteps[currentStep];
   }
   else {
@@ -542,14 +558,30 @@ require("../js-github/test.js");
 function createReadme(module) {
   var user = JSON.parse(localStorage.getItem("user"))
 
-  return "# " + module.name + "\n\n" + 
-    module.metaData.description + "\n\n"
-    "## Example\n\n" +
+  return "# " + module.name + "\n" + 
+    module.metaData.description + "\n" +
+    "## Example\n" +
     "```js\n" + module.metaData.demoSource +
     "\n```\n\n" +
     "## Installation\n\n" +
-    "`npm install " + name + "`\n\n" +
+    "`npm install " + module.name + "`\n\n" +
     "## Contributors\n\n" +
     " - " + user.login + "\n\n" +
-    "## MIT Licenced\n\n"
+    "## MIT Licenced\n"
+}
+
+function createTest(module) {
+  var projectName = camelCase(module.name)
+  return "var test = require(\"tape\")\n\n" +
+    "var " + projectName + " = require(\"../index.js\")\n\n" +
+    "test(\"" + projectName + " is a function\", function (assert) {\n" +
+    "    assert.equal(typeof " + projectName + ", \"function\")\n" +
+    "    assert.end()\n" +
+    "})\n"
+}
+
+function createDemo(module) {
+  var projectName = camelCase(module.name)
+  return "var " + projectName + " = require(\"" + module.name + "\")\n\n" +
+    "// TODO. Show example\n"
 }
