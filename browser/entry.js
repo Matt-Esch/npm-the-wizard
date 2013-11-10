@@ -65,12 +65,18 @@ var elems = {
     leftPanel: byId("leftPanel"),
     depsList: byId("depsList"),
     blackout: byId("blackout"),
-    demoFrame: byId("demoFrame")
+    demoFrame: byId("demoFrame"),
+    testFrame: byId("testFrame")
 };
 
 var exampleSandbox = sandbox({
     cdn: "http://wzrd.in",
     container: elems.demoFrame
+})
+
+var testSandbox = sandbox({
+    cdn: "http://wzrd.in",
+    container: elems.testFrame
 })
 
 window.exampleSandbox = exampleSandbox
