@@ -32,7 +32,7 @@ body {
   font-size: 24px;
 }
 
-#name input {
+input {
   font-size: 24px;
 }
 
@@ -71,12 +71,54 @@ body {
 #rightPanel p {
   font-family: gentium-basic;
   font-size: 20px;
-  margin: 20px 0 0px 0;
+  margin: 20px 0 20px 0;
 }
 
 #login, #docs, #demo, #test, #name, #deps, #publish {
   margin: 70px 20px 20px 20px;
-  height: 800px;
+  height: 3200px;
+}
+
+#publish button {
+  font-family: gentium-basic;
+  font-size: 34px;
+  padding: 5px;
+  background-color: hsla(225, 80%, 90%, 1.0);
+  border: 1px solid #ccc;
+}
+
+#depsList {
+  transition: opacity 180ms;
+  opacity: 1.0;
+}
+
+#depsList.hidden {
+  opacity: 0.0;
+}
+
+#deps table {
+  font-family: gentium-basic;
+  margin: 20px 0 0 0;
+  font-size: 24px;
+}
+
+#deps table th:first-child, #deps table td:first-child {
+  padding: 0 10px 0 0;
+  text-align: right;
+}
+
+#deps table th, #deps table td {
+  padding: 0 0px 0 10px;
+  text-align: left;
+}
+
+#deps table td {
+  padding: 5px 10px;
+}
+
+#deps table input {
+  font-family: source-code-pro;
+  width: 200px;
 }
 
 #guide.deactivated {

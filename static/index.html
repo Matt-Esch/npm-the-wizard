@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>MOCK INTERFACE</title>
+  <title>npm-the-wizard</title>
   <link href="/static/style.css" rel="stylesheet" type="text/css" media="screen">
   <script src="//use.edgefonts.net/ropa-sans;cabin-condensed;source-code-pro;m-1m;gentium-basic.js"></script>
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
@@ -24,7 +24,7 @@
       
       <div id="guide" class="deactivated login">
         <iframe style="display: none" src='http://nodeknockout.com/iframe/team-mad-science' frameborder=0 scrolling=no allowtransparency=true width=115 height=25></iframe>
-        <button id="loginButton" class="login active"><i class="fa fa-github"></i> Login</button>
+        <button id="loginButton" class="login active"><i class="fa fa-github"></i> Authenticate</button>
         <span id="name-slash" class="name slash hidden">/</span>
         <button id="scroll-to-name" class="name hidden">Name</button>
         <span id="deps-arrow" class="deps arrow hidden">⇢</span>
@@ -35,7 +35,7 @@
         <button id="scroll-to-test" class="test hidden">Test</button>
         <span id="docs-arrow" class="docs arrow hidden">⇢</span>
         <button id="scroll-to-docs" class="docs hidden">Docs</button>
-        <span id="publish-arrow" class="publish arrow hidden">⇢</span>
+        <span id="publish-arrow" class="publish arrow hidden">⇒</span>
         <button id="publishButton" class="publish hidden">Publish</button>
       </div>
       
@@ -55,29 +55,58 @@
         <p>
           Does your module have any dependencies?
         </p>
+        <input type="text" name="depsSearch" id="depsSearch" value="">
+        <table id="depsList" class="hidden">
+          <tr>
+            <th>module</th>
+            <th>local variable name</th>
+          </tr>
+        </table>
+        <p>
+          
+        </p>
       </div>
       
       <div id="demo">
         <p>
           A demonstration will help developers to understand how to use your module.
         </p>
+        <textarea id="demoSource"></textarea>
+        <p>
+          This text will be included in the README.md in your module's GitHub repository.
+        </p>
       </div>
       
       <div id="test">
         <p>
-          Tests will add a layer of robustness and trust to your module and make it more likely yo be used by the community.
+          Tests will add a layer of robustness and trust to your module and make it more likely to be used by the community.
         </p>
+        <p>
+          This text will be written to /test/index.js and assumes the lightweight tape testing framework. Additional files and meta data are created for server based testing infrastructure.
+        </p>
+        <textarea id="testSource"></textarea>
       </div>
       
       <div id="docs">
         <p>
           A full set of API calls would be great!
         </p>
+        <textarea id="docsSource"></textarea>
+        <p>
+          This text will be included in the README.md in your module's GitHub repository.
+        </p>
       </div>
       
       <div id="publish">
         <p>
           It is time to publish!
+        </p>
+        <p>
+          <label for="npmUserName">npm username:</label>
+          <input type="text" name="npmUserName" id="npmUserName" value="">
+        </p>
+        <p>
+          <button id="publish-to-github-and-npm">Publish to GitHub and npm</button>
         </p>
       </div>
 

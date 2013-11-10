@@ -44,9 +44,16 @@ var elems = {
     docsButton: byId("scroll-to-docs"),
     testButton: byId("scroll-to-test"),
     publishButton: byId("publishButton"),
+    publishToGitHubAndNpm: byId("publish-to-github-and-npm"),
     loginButton: byId("loginButton"),
     moduleName: byId("moduleName"),
+    npmUserName: byId("npmUserName"),
+    docsSource: byId("docsSource"),
+    testSource: byId("testSource"),
+    demoSource: byId("demoSource"),
     sourceCode: byId("sourceCode"),
+    depsSearch: byId("depsSearch"),
+    depsList: byId("depsList"),
     blackout: byId("blackout")
 };
 
@@ -106,6 +113,9 @@ function afterLogin(user) {
         if ((event.keyCode == 78 || event.keyCode == 13) && document.body == document.activeElement) {
             goToNextStep();
         }
+        else if (document.body != document.activeElement && (event.keyCode == 13 && event.shiftKey)) {
+            goToNextStep();
+        }
     });
 }
 
@@ -133,25 +143,45 @@ var guideSteps = [
     name: "deps",
     leadingElement: elems.depsArrow,
     buttonElement: elems.depsButton,
-    element: elems.deps
+    element: elems.deps,
+    onSet: function() {
+      setTimeout(function() {
+        elems.depsSearch.focus();
+      }, 180);
+    }
   },
   {
     name: "demo",
     leadingElement: elems.demoArrow,
     buttonElement: elems.demoButton,
-    element: elems.demo
+    element: elems.demo,
+    onSet: function() {
+      setTimeout(function() {
+        demoSourceEditor.focus();
+      }, 180);
+    }
   },
   {
     name: "test",
     leadingElement: elems.testArrow,
     buttonElement: elems.testButton,
-    element: elems.test
+    element: elems.test,
+    onSet: function() {
+      setTimeout(function() {
+        testSourceEditor.focus();
+      }, 180);
+    }
   },
   {
     name: "docs",
     leadingElement: elems.docsArrow,
     buttonElement: elems.docsButton,
-    element: elems.docs
+    element: elems.docs,
+    onSet: function() {
+      setTimeout(function() {
+        docsSourceEditor.focus();
+      }, 180);
+    }
   },
   {
     name: "publish",
@@ -159,15 +189,22 @@ var guideSteps = [
     buttonElement: elems.publishButton,
     element: elems.publish,
     onSet: function() {
-      publishToRepo(codeModule, function(err, res) {
-          if (err) {
-              return;
-          }
-          // didPublishSuccessfully(res);
-      });
+      setTimeout(function() {
+        elems.npmUserName.focus();
+      }, 180);
     }
   }
 ];
+
+elems.publishToGitHubAndNpm.addEventListener("click", function() {
+  publishToRepo(codeModule, function(err, res) {
+      if (err) {
+          return;
+      }
+      console.log("res", res);
+      // didPublishSuccessfully(res);
+  });
+});
 
 var currentStep = 0;
 
@@ -185,35 +222,68 @@ for (var i = 0; i < guideSteps.length; i++) {
   createGuideStep(guideSteps[i]);
 }
 
-var mirror = CodeMirror.fromTextArea(elems.sourceCode, {
+var sourceCodeEditor = CodeMirror.fromTextArea(elems.sourceCode, {
     value: elems.sourceCode.textContent || "",
     mode: "javascript",
     lineNumbers: true,
     theme: "ambiance"
 });
-mirror.setSize(window.innerWidth/2, window.innerHeight);
-mirror.on("change", sourceCodeChange);
-mirror.setValue(codeModule.sourceCode);
+sourceCodeEditor.setSize(window.innerWidth/2, window.innerHeight);
+sourceCodeEditor.on("change", sourceCodeChange);
+function sourceCodeChange() {
+    codeModule.sourceCode = sourceCodeEditor.getValue();
+}
+sourceCodeEditor.setValue(codeModule.sourceCode);
 
-window.addEventListener('resize', guideCenterOnResize, true);
-function guideCenterOnResize(event) {
-  mirror.setSize(window.innerWidth/2, window.innerHeight);
+var testSourceEditor = CodeMirror.fromTextArea(elems.testSource, {
+    value: elems.testSource.textContent || "",
+    mode: "javascript",
+    lineNumbers: true,
+    theme: "ambiance"
+});
+testSourceEditor.on("change", testSourceChange);
+function testSourceChange() {
+    codeModule.metaData.testSource = testSourceEditor.getValue();
+}
+
+var demoSourceEditor = CodeMirror.fromTextArea(elems.demoSource, {
+    value: elems.demoSource.textContent || "",
+    mode: "javascript",
+    lineNumbers: true,
+    theme: "ambiance"
+});
+demoSourceEditor.on("change", demoSourceChange);
+function demoSourceChange() {
+    codeModule.metaData.demoSource = demoSourceEditor.getValue();
+}
+
+var docsSourceEditor = CodeMirror.fromTextArea(elems.docsSource, {
+    value: elems.docsSource.textContent || "",
+    mode: "markdown",
+    lineNumbers: true,
+    theme: "ambiance"
+});
+docsSourceEditor.on("change", docsSourceChange);
+function docsSourceChange() {
+    codeModule.metaData.docsSource = docsSourceEditor.getValue();
+}
+
+window.addEventListener('resize', windowResize, true);
+function windowResize(event) {
+  sourceCodeEditor.setSize(window.innerWidth/2, window.innerHeight);
   if (guide.classList.contains("login")) {
     guide.style.marginLeft = -guide.offsetWidth/2 + "px";
     guide.style.marginTop = -guide.offsetHeight/2 + "px";
     guide.classList.remove("deactivated");
     guide.classList.add("activated");
   }
+  var panes = document.querySelectorAll("#login, #docs, #demo, #test, #name, #deps, #publish");
+  for (var i = 0; i < panes.length; i++) {
+    var p = panes[i];
+    p.style.height = window.innerHeight + "px";
+  }
 }
-guideCenterOnResize();
-
-function moduleNameChange() {
-    codeModule.name = elems.moduleName.value;
-}
-
-function sourceCodeChange() {
-    codeModule.sourceCode = mirror.getValue();
-}
+windowResize();
 
 function fadeInElement(elem, delay) {
   setTimeout(function() {
@@ -293,9 +363,60 @@ function submitName() {
   codeModule.name = name;
 }
 
+function submitNpmUserName() {
+  elems.npmUserName.blur();
+  codeModule.metaData.npmUserName = elems.npmUserName.value;
+}
+
+function addDepToList() {
+  var depName = elems.depsSearch.value;
+  /*
+  <tr>
+    <td>byId</td>
+    <td><input type="text" value="byId" /></td>
+    <td><i class="fa fa-times-circle"></i></td>
+  </tr>
+  */
+  elems.depsList.classList.remove("hidden");
+  var tr = document.createElement("tr");
+  var td1 = document.createElement("td");
+  var td2 = document.createElement("td");
+  var td3 = document.createElement("td");
+  td1.innerHTML = depName;
+  var depLocalVarName = document.createElement("input");
+  depLocalVarName.type = "text";
+  depLocalVarName.value = depName;
+  td2.appendChild(depLocalVarName);
+  var removeDep = document.createElement("i");
+  removeDep.className = "fa fa-times-circle";
+  td3.appendChild(removeDep);
+  tr.appendChild(td1);
+  tr.appendChild(td2);
+  tr.appendChild(td3);
+  elems.depsList.appendChild(tr);
+  removeDep.addEventListener("click", function() {
+    elems.depsList.removeChild(tr);
+    if (document.querySelectorAll("#depsList tr").length == 1) {
+      elems.depsList.classList.add("hidden");
+    }
+  });
+}
+
 elems.moduleName.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
     submitName();
+  }
+});
+
+elems.npmUserName.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    submitNpmUserName();
+  }
+});
+
+elems.depsSearch.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    addDepToList();
   }
 });
 
