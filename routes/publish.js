@@ -42,6 +42,7 @@ function publishRoute(req, res) {
 
         publish(body.github, body.userName, function (err, resp) {
             if (err) {
+                console.log("error", err, err.message)
                 return sendError(req, res, err)
             }
 

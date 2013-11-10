@@ -14,13 +14,19 @@ function publish(githubUri, npmUserName, callback) {
     var parts = githubUri.split("/")
     var moduleName = parts[1]
 
-    checkNamespace(moduleName, function (err) {
+    checkNamespace(moduleName, function (err, taken) {
         if (err) {
+            console.log("NAMESPACE BUG", err)
             return callback(err)
+        }
+
+        if (taken) {
+            return callback(new Error("npm module taken"))
         }
 
         cloneLocally(githubUri, folder, function (err) {
             if (err) {
+                console.log("CLONE BUG", err)
                 return callback(err)
             }
 

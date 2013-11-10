@@ -29,17 +29,28 @@ function publishModule(module, callback) {
 
             // console.log("files", files)
 
-            var example = {}
-            example["index.js"] = module.metaData.demoSource || ""
+            if (module.metaData.demoSource) {
+                var example = {}
+                example["index.js"] = module.metaData.demoSource || ""
 
-            files["example"] = example
+                files["example"] = example
+            }
+            
 
-            var test = {}
-            test["index.js"] = module.metaData.testSource || ""
+            if (module.metaData.testSource) {
+                var test = {}
+                test["index.js"] = module.metaData.testSource || ""
 
-            files["test"] = test
-            files["README.md"] = module.metaData.docsSource || ""
-            files["index.js"] = module.sourceCode
+                files["test"] = test
+            }
+            
+            if (module.metaData.docsSource) {
+                files["README.md"] = module.metaData.docsSource || ""
+            }
+
+            if (module.sourceCode) {
+                files["index.js"] = module.sourceCode
+            }
 
             module.metaData.gitRepoFiles = files
 
