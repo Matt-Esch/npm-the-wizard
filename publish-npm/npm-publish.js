@@ -25,18 +25,22 @@ function npmPublish(folder, userName, callback) {
 
 // ensure the user is added
 function ensureUser(callback) {
+    console.log("npmConfig", npmConfig)
     var cmd = npmrun([
         "--userconfig=" + npmConfig,
         "adduser"
     ], callback)
 
     matchRegex(cmd, /Username:/, function () {
+        console.log("wrote Username", config.username)
         cmd.stdin.write(config.username + "\n")
     })
     matchRegex(cmd, /Password:/, function () {
+        console.log("wrote password", config.password)
         cmd.stdin.write(config.password + "\n")
     })
     matchRegex(cmd, /Email:/, function () {
+        console.log("wrote email", config.email)
         cmd.stdin.write(config.email + "\n", function () {
             cmd.stdin.end()
         })
@@ -44,6 +48,7 @@ function ensureUser(callback) {
 }
 
 function callPublish(folder, callback) {
+    console.log("npmConfig", npmConfig, folder)
     npmrun([
         "--userconfig=" + npmConfig,
         "publish"
